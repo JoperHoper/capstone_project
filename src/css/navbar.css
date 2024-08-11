@@ -1,0 +1,53 @@
+.navbar-container {
+  height: 12vh;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 2px solid #faf8f6;
+}
+
+.logo {
+  max-width: 100%;
+  height: auto;
+  margin-left: 40px;
+}
+
+.navbar-menu {
+  display: flex;
+  width: 40vw;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.vl {
+  border-left: 1px solid #faf8f6;
+  height: 20px;
+}
+
+.menu-icon {
+  display: none;
+}
+
+.app-icon {
+  display: none;
+}
+
+@media only screen and (max-width: 960px) {
+  .menu-icon {
+    display: flex;
+    width: 20vw;
+    align-items: center;
+    justify-content: center;
+  }
+  .logo {
+    display: none;
+  }
+  .app-icon {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin-left: 40px;
+  }
+  .navbar-menu {
+    display: none;
+  }
+}
