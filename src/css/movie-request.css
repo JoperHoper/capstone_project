@@ -1,0 +1,41 @@
+.request-container {
+  height: 125vh;
+}
+
+.request-form-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.rq-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 50vw;
+  height: 50vh;
+  gap: 20px;
+  position: relative;
+}
+
+.request-field {
+  padding: 8px 10px;
+  width: 15vw;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.request-btn {
+  margin-top: 20px;
+  padding: 10px 25px;
+  border-radius: 8px;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+  background-color: #6464ae;
+  color: #faf8f6;
+  float: right;
+}

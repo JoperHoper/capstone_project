@@ -1,13 +1,20 @@
-import { Container, Typography } from '@mui/material'
+import { Container } from '@mui/material'
 import "../css/homepage.css"
 import React from 'react'
 import NavBar from './NavBar'
+import HomepageCarousel from './HomepageCarousel'
+import Footer from './Footer'
+import FilterByYear from '../cards/FilterByYear'
+import FIlterByGenre from '../cards/FIlterByGenre'
 
 function Homepage() {
     return (
-        <Container disableGutters={true} maxWidth="false" sx={{ bgcolor: "background.default" }} className='homepage-container' >
+        <Container disableGutters={true} maxWidth="false" sx={{ bgcolor: "background.default", minHeight: "220vh" }} className='homepage-container' >
             <NavBar />
-            <Typography variant='heading'>Testing the theme</Typography>
+            <HomepageCarousel />
+            <FilterByYear />
+            <FIlterByGenre />
+            <Footer />
         </Container>
     )
 }

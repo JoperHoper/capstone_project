@@ -3,6 +3,10 @@
   align-items: center;
   padding: 10px;
   border-bottom: 2px solid #faf8f6;
+  border: 1px solid pink;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .logo {
@@ -13,9 +17,10 @@
 
 .navbar-menu {
   display: flex;
-  width: 40vw;
+  width: 30vw;
   align-items: center;
   justify-content: space-evenly;
+  border: 1px solid yellow;
 }
 
 .vl {
@@ -23,7 +28,11 @@
   height: 20px;
 }
 
-.menu-icon {
+a {
+  color: #faf8f6;
+}
+
+.mobile-menu-icon {
   display: none;
 }
 
@@ -31,8 +40,16 @@
   display: none;
 }
 
+#searchBar {
+  width: 85%;
+  font-size: 16px;
+  border: none;
+  width: 100%;
+  outline: none;
+}
+
 @media only screen and (max-width: 960px) {
-  .menu-icon {
+  .mobile-menu-icon {
     display: flex;
     width: 20vw;
     align-items: center;

@@ -7,7 +7,7 @@ export const theme = createTheme({
             fontFamily: 'Inter Variable',
             fontWeight: "500",
             fontStyle: "normal",
-            fontSize: "30px"
+            fontSize: "25px"
         },
         p: {
             fontFamily: 'Inter Variable',

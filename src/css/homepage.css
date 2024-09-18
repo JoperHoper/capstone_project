@@ -1,3 +1,26 @@
 .homepage-container {
   height: 100vh;
 }
+
+.swiper {
+  width: 80%;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.mySwiper {
+  margin-top: 5vh;
+}
+
+.img-container {
+  position: relative;
+  height: 45vh;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.swiper-img {
+  width: 100%;
+  user-select: none;
+}

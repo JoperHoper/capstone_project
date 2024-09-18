@@ -1,0 +1,55 @@
+.card-slider {
+  position: relative;
+}
+
+.card-wrapper {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  max-width: 10vw;
+  height: 50vh;
+}
+
+.fc-img {
+  height: 30vh;
+  max-width: 20vw;
+}
+
+.trailer-btn {
+  background-color: #6464ae;
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+}
+
+.cards-btn-container {
+  display: flex;
+  justify-items: center;
+  justify-content: space-between;
+  position: relative;
+  top: -200px;
+}
+
+.btn-left {
+  position: relative;
+  right: 0.5rem;
+  border-radius: 99px;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: #d1d5db;
+}
+
+.btn-right {
+  position: relative;
+  left: 0.5rem;
+  border-radius: 99px;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: #d1d5db;
+}

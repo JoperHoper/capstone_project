@@ -1,0 +1,92 @@
+.acc-container {
+  height: 150vh;
+}
+
+.profile-ring {
+  border: 4px solid #6464ae;
+  width: 16vw;
+  height: inherit;
+  border-radius: 150px;
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-pic-container {
+  height: 35vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.profile-pic-container img {
+  width: 320px;
+  height: 260px;
+  position: relative;
+}
+
+.bio-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+textarea {
+  resize: none;
+  border-radius: 8px;
+}
+
+.bio-text {
+  display: flex;
+  flex-wrap: wrap;
+  height: 5vh;
+  width: 30vw;
+  justify-content: center;
+}
+
+.btn-container {
+  height: 5vh;
+  display: flex;
+  flex-direction: row-reverse;
+  width: 55vw;
+}
+
+.acc-btn {
+  width: 6vw;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #6464ae;
+  color: #faf8f6;
+}
+
+.acc-btn:hover {
+  background-color: #50508a;
+}
+
+.details-container {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bio-container-2 {
+  height: 45vh;
+  width: 55vw;
+}
+
+.MuiAutocomplete-popper .MuiAutocomplete-option {
+  color: #181829;
+}
+
+.acc-divider {
+  width: 90%;
+  float: left;
+  opacity: 0.4;
+}
+
+.value-input-container {
+  text-align: center;
+}

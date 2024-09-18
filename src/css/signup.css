@@ -1,0 +1,60 @@
+.signup-container {
+  height: 150vh;
+}
+
+.signup-form-container {
+  height: 110vh;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+}
+
+.su-form-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  width: 60vw;
+  height: 80vh;
+  gap: 15px;
+  position: relative;
+}
+
+.pwd-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-left: 30px;
+}
+
+.visible-toggle {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  cursor: pointer;
+}
+
+.su-input-field {
+  width: 35%;
+  padding: 8px 5px;
+  border: none;
+  border-radius: 8px;
+}
+
+.reg-btn {
+  margin-top: 20px;
+  padding: 10px 25px;
+  border-radius: 8px;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+  background-color: #6464ae;
+  color: #faf8f6;
+  float: right;
+}
+
+.reg-btn:hover {
+  background-color: #51518d;
+}
