@@ -29,6 +29,15 @@ function FilterByYear() {
         setUpFavouriteMap()
     }, [favourite])
 
+    let filteredArr = []
+    const populateMovie = () => {
+        if (movie && movie.movieArr && Array.isArray(movie.movieArr)) {
+            filteredArr = movie?.movieArr?.filter(({ releaseDate }) => {
+                return releaseDate.slice(0, 4) >= 2000 && releaseDate.slice(0, 4) <= 2005
+            })
+        }
+    }
+
     useEffect(() => {
         console.log(createFavourite)
         if (createFavourite.favArr === 403) {
@@ -40,18 +49,19 @@ function FilterByYear() {
     }, [createFavourite])
 
     const setUpFavouriteMap = () => {
-        if (favourite?.favArr?.length > 0) {
-            let temp = {}
-            favourite?.favArr?.map((data) => {
-                temp[data.movieId] = true
-            })
-            setFavoriteMap(temp)
+        if (favourite && favourite.favArr && Array.isArray(favourite.favArr)) {
+            if (favourite?.favArr?.length > 0) {
+                let temp = {}
+                favourite?.favArr?.map((data) => {
+                    temp[data.movieId] = true
+                })
+                setFavoriteMap(temp)
+            }
         }
     }
 
     const handleFavourite = (e) => {
         const movieId = parseInt(e.currentTarget.dataset.id)
-        console.log(e)
         let latestFavMap = { ...favoriteMap }
         if (!latestFavMap[movieId]) {
             latestFavMap[movieId] = true
@@ -66,7 +76,6 @@ function FilterByYear() {
     }
 
     const favouriteIcon = (movieId) => {
-        console.log("movie:", movieId)
         if (favoriteMap[movieId]) {
             return <Favorite data-id={movieId} color='primary' onClick={handleFavourite} />
         }
@@ -75,48 +84,61 @@ function FilterByYear() {
         }
     }
 
-
-    let filteredArr = movie.movieArr.filter(({ releaseDate }) => {
-        return releaseDate.slice(0, 4) >= 2000 && releaseDate.slice(0, 4) <= 2005
-    })
+    const handleFilteredYears = () => {
+        console.log(filteredArr)
+        if (filteredArr && Array.isArray(filteredArr)) {
+            return filteredArr.slice(currentIndex, currentIndex + 5).map((card, index) => (
+                <div className='card' key={index}>
+                    <span style={{ zIndex: "10", position: "absolute", border: "2px solid red" }}>
+                        {favouriteIcon(card.movieId)}
+                    </span>
+                    <img className='' src={card.posterUrl} alt="Card" />
+                    <span>
+                        <Typography variant='text.primary'>
+                            <Box className="trailer-btn">
+                                <a target='blank' href={card.trailerUrl}>Watch Trailer</a>
+                            </Box>
+                        </Typography>
+                    </span>
+                    <Typography variant='typography.p' color='text.primary'>
+                        <h4>{card.movieTitle}</h4>
+                        <p>{card.language}</p>
+                    </Typography>
+                </div>
+            ))
+        }
+        else {
+            return <div></div>
+        }
+    }
 
     const handleFilteredCards = () => {
         const handleNext = () => {
-            setCurrentIndex((prevIndex) => (prevIndex + 1) % filteredArr.length);
+            if (currentIndex === filteredArr.length - 1) {
+                setCurrentIndex(0)
+            }
+            else {
+                setCurrentIndex((prevIndex) => (prevIndex + 1) % filteredArr.length);
+            }
         };
 
         const handlePrev = () => {
-            setCurrentIndex((prevIndex) => (prevIndex - 1 + filteredArr.length) % filteredArr.length);
+            if (currentIndex == 0) {
+                setCurrentIndex(filteredArr.length - 1)
+            }
+            else {
+                setCurrentIndex((prevIndex) => (prevIndex - 1 + filteredArr.length) % filteredArr.length);
+            }
         };
 
-        if (currentIndex > filteredArr.length - 5) {
-            // console.log(currentIndex)
-            setCurrentIndex(0)
-            // console.log("hi")
+        if (filteredArr.length === 0) {
+            populateMovie()
         }
 
         return (
             <div className='card-slider'>
                 <div className='card-wrapper'>
-                    {filteredArr.slice(currentIndex, currentIndex + 5).map((card, index) => (
-                        <div className='card' key={index}>
-                            <span style={{ zIndex: "10", position: "absolute", border: "2px solid red" }}>
-                                {favouriteIcon(card.movieId)}
-                            </span>
-                            <img className='' src={card.posterUrl} alt="Card" />
-                            <span>
-                                <Typography variant='text.primary'>
-                                    <Box className="trailer-btn">
-                                        <a target='blank' href={card.trailerUrl}>Watch Trailer</a>
-                                    </Box>
-                                </Typography>
-                            </span>
-                            <Typography variant='typography.p' color='text.primary'>
-                                <h4>{card.movieTitle}</h4>
-                                <p>{card.language}</p>
-                            </Typography>
-                        </div>
-                    ))}
+                    {handleFilteredYears()}
                 </div>
                 <div className="cards-btn-container" style={{ display: "flex", justifyItems: "center", justifyContent: "space-between", position: "relative", top: "-200px" }}>
                     <button className='btn-left' onClick={handlePrev}>&lt;</button>

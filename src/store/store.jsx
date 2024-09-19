@@ -11,6 +11,6 @@ export const store = configureStore({
         favourite: favouriteSlice,
         createFavourite: createFavouriteSlice,
         favouriteBoard: favouriteBoardSlicer,
-        favToBoardSlicer: favToBoardSlicer
+        favToBoard: favToBoardSlicer
     }
 })

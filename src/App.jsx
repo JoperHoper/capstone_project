@@ -10,6 +10,7 @@ import Account from './components/Account';
 import Randomizer from './components/Randomizer';
 import Favourites from './components/Favourites';
 import FavouritesError from './components/FavouritesError';
+import Board from './components/Board';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
         <Route path='randomizer' element={<Randomizer />} />
         <Route path='favourites' element={<Favourites />} />
         <Route path='favourites-error' element={<FavouritesError />} />
+        <Route path='favourites/board/*' element={<Board />} />
       </Routes>
     </ThemeProvider>
   )

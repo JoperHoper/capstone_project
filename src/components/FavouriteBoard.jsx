@@ -1,35 +1,55 @@
 import React from 'react'
-import { Container, Box } from '@mui/material'
+import { Container, Box, Button } from '@mui/material'
 import { fetchFavouriteBoard } from "../slices/favouriteBoardSlicer"
 import { fetchFavInBoard } from '../slices/favToBoardSlicer'
+import { fetchFavourites } from '../slices/favourite'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import useLocalStorage from "../hook/useLocalStorage";
+import { useNavigate } from 'react-router-dom'
 
 function FavouriteBoard() {
     const dispatch = useDispatch();
     const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
     const fav = useSelector((state) => state.favouriteBoard)
-    const favToBoard = useSelector((state) => state.favsInBoard)
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(fetchFavouriteBoard({ accessToken: accessToken }))
     }, [])
 
-    // useEffect(() => {
-    //     let boardId = fav.boardArr[0].boardId
-    //     console.log(boardId)
-    //     dispatch(fetchFavInBoard({ boardId: boardId }));
-    // }, [fav])
+    useEffect(() => {
+        if (fav && fav.boardArr && Array.isArray(fav.boardArr)) {
+            if (fav.boardArr[0]) {
+                let boardId = fav.boardArr[0].boardId
+                console.log(boardId)
+                // dispatch(fetchFavInBoard({ boardId: boardId, accessToken: accessToken }));
+            }
+        }
+    }, [fav])
+
+    const handleClick = () => {
+        if (fav.boardArr[0]) {
+            let boardId = fav.boardArr[0].boardId
+            console.log(boardId)
+            // dispatch(fetchFavInBoard({ boardId: boardId, accessToken: accessToken }));
+            navigate("board/" + boardId)
+        }
+    }
 
     const handleBoards = () => {
-        return fav.boardArr.map((data) => {
-            return (
-                <Box sx={{ border: "1px solid yellow", minWidth: "12vw", height: "35vh", backgroundColor: "#6464AE", boxShadow: "10px 10px #EE6F4E" }}>
-                    {data.name}
-                </Box>
-            )
-        })
+        if (fav && fav.boardArr && Array.isArray(fav.boardArr)) {
+            return fav.boardArr.map((data) => {
+                return (
+                    <Button onClick={handleClick} sx={{ border: "1px solid yellow", minWidth: "12vw", height: "35vh", backgroundColor: "#6464AE", boxShadow: "10px 10px #EE6F4E" }}>
+                        {data.name}
+                    </Button>
+                )
+            })
+        }
+        else {
+            return <Box></Box>
+        }
     }
 
     return (
