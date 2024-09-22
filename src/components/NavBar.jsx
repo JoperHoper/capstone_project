@@ -1,4 +1,4 @@
-import { Container, Typography, Box, Drawer, Button, List, Divider, ListItem, ListItemButton, ListItemIcon, ListItemText, } from '@mui/material'
+import { Typography, Box, Drawer, Button, List, Divider, ListItem, ListItemButton, ListItemIcon, ListItemText, } from '@mui/material'
 import Grid from '@mui/material/Grid2';
 import { Menu, Search, AccountCircle } from '@mui/icons-material';
 import logo from "../assets/jpmovie_logo_cropped_white.png"
@@ -8,7 +8,6 @@ import "../css/navbar.css"
 import Link from '@mui/material/Link';
 import useLocalStorage from "../hook/useLocalStorage.jsx"
 import { useNavigate } from 'react-router-dom';
-
 
 function NavBar() {
     const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
@@ -54,19 +53,46 @@ function NavBar() {
 }
 
 function TemporaryDrawer() {
+    const navigate = useNavigate();
     const [open, setOpen] = React.useState(false);
 
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen);
     };
 
+    let drawerRoute = [
+        "View All",
+        "Movie Submission",
+        'I\'m Feeling...',
+        'About',
+        'Sign up'
+    ]
+
+    const routing = () => {
+        console.log("here")
+        for (let i = 0; i < drawerRoute.length; i++) {
+            if (drawerRoute[i] === "View All") {
+                navigate("/view-all")
+            }
+            if (drawerRoute[i] === "Movie Submission") {
+                navigate("/movie-request")
+            }
+            if (drawerRoute[i] === "I\'m Feeling...") {
+                navigate("/randomizer")
+            }
+            if (drawerRoute[i] === "Sign up") {
+                navigate("/signup")
+            }
+        }
+    }
+
     const DrawerList = (
-        <Typography>
-            <Box sx={{ width: 300, backgroundColor: "#2F2E4F", paddingTop: "50px", height: "100%" }} role="presentation" onClick={toggleDrawer(false)}>
+        <Box sx={{ width: 300, backgroundColor: "#2F2E4F", paddingTop: "50px", height: "100%" }} role="presentation" onClick={toggleDrawer(false)}>
+            <Typography>
                 <List>
-                    {['View All', 'Movie Submission', 'I\'m Feeling...'].map((text) => (
-                        <ListItem key={text} variant="menu" disablePadding>
-                            <ListItemButton>
+                    {drawerRoute.slice(0, 3).map((text, index) => (
+                        <ListItem key={index} variant="menu" disablePadding>
+                            <ListItemButton onClick={routing}>
                                 <ListItemText primary={text} color='secondary.main' />
                             </ListItemButton>
                         </ListItem>
@@ -74,16 +100,16 @@ function TemporaryDrawer() {
                 </List>
                 <Divider />
                 <List>
-                    {['About', 'Sign up'].map((text, index) => (
-                        <ListItem key={text} disablePadding>
-                            <ListItemButton>
+                    {drawerRoute.slice(3).map((text, index) => (
+                        <ListItem key={index} disablePadding>
+                            <ListItemButton onClick={routing}>
                                 <ListItemText primary={text} />
                             </ListItemButton>
                         </ListItem>
                     ))}
                 </List>
-            </Box>
-        </Typography>
+            </Typography>
+        </Box>
     );
 
     return (

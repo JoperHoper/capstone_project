@@ -1,8 +1,6 @@
 import React from 'react'
 import { Container, Box, Button } from '@mui/material'
 import { fetchFavouriteBoard } from "../slices/favouriteBoardSlicer"
-import { fetchFavInBoard } from '../slices/favToBoardSlicer'
-import { fetchFavourites } from '../slices/favourite'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import useLocalStorage from "../hook/useLocalStorage";

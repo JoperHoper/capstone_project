@@ -6,9 +6,6 @@ const initialState = { loading: true, favArr: [], error: '' }
 export const fetchFavourites =
     createAsyncThunk("fetchFavourites", async (input) => {
         return axios.get("http://localhost:8000/favourite/get",
-            // {
-            //     favouriteIds: input.favouriteIds
-            // },
             {
                 headers: {
                     Authorization: 'Bearer ' + input.accessToken //the token is a variable which holds the token
