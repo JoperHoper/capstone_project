@@ -7,6 +7,7 @@ import favToBoardSlicer from "../slices/favToBoardSlicer";
 import userSlicer from "../slices/userSlicer";
 import updateUserSlicer from "../slices/updateUserSlicer";
 import movieByIdSlicer from "../slices/movieByIdSlicer";
+import deleteFavouriteSlicer from "../slices/deleteFavourite";
 
 
 export const store = configureStore({
@@ -18,6 +19,7 @@ export const store = configureStore({
         favToBoard: favToBoardSlicer,
         user: userSlicer,
         updateUser: updateUserSlicer,
-        movieById: movieByIdSlicer
+        movieById: movieByIdSlicer,
+        deleteFavourite: deleteFavouriteSlicer
     }
 })

@@ -1,0 +1,28 @@
+.favourite-board-img {
+  height: inherit;
+  width: 12vw;
+  opacity: 0.8;
+  border-radius: 5px;
+}
+
+.favourite-board-container {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: row;
+}
+
+.favourite-board-container span {
+  padding: 0px 25px;
+  height: 35vh;
+}
+
+.favourite-board-btn {
+  border-radius: 50px;
+  border: none;
+  padding: 20px 30px;
+  font-size: 30px;
+  cursor: pointer;
+  margin-top: 12vh;
+  background-color: #6464ae;
+  color: #faf8f6;
+}

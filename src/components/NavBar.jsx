@@ -56,8 +56,8 @@ function NavBar() {
             return searchResult.slice(0, 5).map((searchItem, index) => {
                 return (
                     <>
-                        <div key={index} id={searchItem.movieId} onClick={viewMovieDetails} style={{ display: "flex", flexDirection: 'row', alignItems: "center", padding: "5px" }}>
-                            <img style={{ maxHeight: "60px", padding: "5px" }} src={searchItem.posterUrl} />
+                        <div key={index} id={searchItem.movieId} onClick={viewMovieDetails} className='search-result'>
+                            <img src={searchItem.posterUrl} className='search-result-img' />
                             <h3>{searchItem.movieTitle}</h3>
                         </div>
                         <Divider />
@@ -82,19 +82,19 @@ function NavBar() {
     return (
         <div>
             <Grid container spacing={4} columns={16} sx={{ height: "10vh" }} >
-                <Grid display={'flex'} justifyContent={"center"} alignItems={'center'} size={3} >
-                    <a href='/'><img className='logo' style={{ height: "60px", width: "120px" }} src={logo} href="/" /></a>
-                    <img className='app-icon' style={{ height: "50px", width: "50px" }} src={appIcon} />
+                <Grid display={'flex'} justifyContent={"center"} alignItems={'center'} size={3} className="nav-logo-container">
+                    <a href='/'><img className='logo' src={logo} href="/" /></a>
+                    <img className='app-icon' src={appIcon} />
                 </Grid>
                 <Grid display={'flex'} justifyContent={"flex-start"} alignItems={'center'} size={1}>
                     <TemporaryDrawer />
                 </Grid>
-                <Grid display={'flex'} flexDirection={"column"} justifyContent={"center"} alignItems={'center'} size={8}>
-                    <div style={{ alignItems: "center", display: "flex", borderRadius: "8px", backgroundColor: "white", width: "80%", padding: "6px 5px" }}>
-                        <span style={{ margin: "0px" }}><Search /></span>
+                <Grid display={'flex'} flexDirection={"column"} justifyContent={"center"} alignItems={'center'} size={8} className="nav-searchbar-container">
+                    <div className="nav-searchbar">
+                        <span><Search /></span>
                         <input ref={searchRef} onChange={handleSearch} name='searchBar' type='search' placeholder='Find a movie...' id='searchBar' />
                     </div>
-                    <div className='search-dropdown hidden' ref={searchDrop} style={{ width: "40vw", position: "absolute", top: "55px", zIndex: "99", backgroundColor: "white" }}>
+                    <div className='search-dropdown hidden' ref={searchDrop}>
                         {displaySearchResult()}
                     </div>
                 </Grid>
@@ -151,7 +151,7 @@ function TemporaryDrawer() {
     }
 
     const DrawerList = (
-        <Box sx={{ width: 300, backgroundColor: "#2F2E4F", paddingTop: "50px", height: "100%" }} role="presentation" onClick={toggleDrawer(false)}>
+        <Box className="drawer-container" role="presentation" onClick={toggleDrawer(false)}>
             <Typography>
                 <List>
                     {drawerRoute.slice(0, 3).map((text, index) => (

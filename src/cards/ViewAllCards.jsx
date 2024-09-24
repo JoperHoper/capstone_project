@@ -8,6 +8,7 @@ import { Button, Container, Grid2, Card, Typography, CardMedia, CardContent, Car
 import { FavoriteBorder, Favorite } from '@mui/icons-material'
 import useLocalStorage from "../hook/useLocalStorage";
 import { useNavigate } from "react-router-dom";
+import "../css/ViewAll.css"
 
 function ViewAllCards() {
     const dispatch = useDispatch();
@@ -92,10 +93,10 @@ function ViewAllCards() {
         }
         return movieDisplay.map((movie) => {
             return <Grid2 size={{ xs: 4, md: 2 }} key={movie.movieId}>
-                <Card sx={{ maxWidth: "30vw", minHeight: "60vh" }}>
-                    <CardActionArea sx={{ position: "relative" }}  >
+                <Card className='movie-card-container'>
+                    <CardActionArea>
                         <Typography>
-                            <span style={{ zIndex: "50", position: "absolute" }}>
+                            <span>
                                 {favouriteIcon(movie.movieId)}
                             </span>
                         </Typography>
@@ -127,8 +128,8 @@ function ViewAllCards() {
     }
 
     return (
-        <Container maxWidth="lg" sx={{ minHeight: "120vh" }}>
-            <Grid2 container spacing={3} justifyItems="center" sx={{ width: "100%" }}>
+        <Container maxWidth="lg" className='viewAll-container'>
+            <Grid2 container spacing={3} justifyItems="center">
                 {cards()}
             </Grid2>
             <Typography>

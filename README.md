@@ -1,4 +1,4 @@
-# Classic Movie Web
+# Classic Movie Web 🎥
 
 Explore your favorite classic films with our website! Receive weekly recommendations for beloved cult classics and cherished favorites, ensuring you always have great movies at your fingertips. Additionally, our movie randomizer alleviates the hassle of decision-making, helping you discover what to watch next. Can't find the movie you like? Submit a movie request via our movie request form!
 
@@ -41,7 +41,7 @@ Explore your favorite classic films with our website! Receive weekly recommendat
 
 # ✅ How to run Classic Movie Web locally:
 
-1. Set up the backend before proceeding: [(https://github.com/JoperHoper/capstone_project_backend)]
+1. Set up the backend before proceeding: [https://github.com/JoperHoper/capstone_project_backend]
 2. Clone this project using Git
 3. Run `npm install` to install dependencies
 4. Start the project locally with `npm run dev`
@@ -50,13 +50,13 @@ Explore your favorite classic films with our website! Receive weekly recommendat
 
 ## 🖥 How to use the project:
 
-1. Dummy account for testing
-   Username: carolyn
+1. Dummy account for testing<br/>
+   Username: carolyn<br/>
    Password: 1234cccc
 
 2. Or create your own account using the signup page
 
 ### License:
 
-Copyright ©️ 2024 **Josephine Lim**
+Copyright ©️ 2024 **Josephine Lim**<br/>
 _This project is not for commercial distribution_

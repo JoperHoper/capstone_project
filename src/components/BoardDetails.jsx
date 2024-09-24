@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import useLocalStorage from "../hook/useLocalStorage";
 import { useParams } from 'react-router-dom'
+import "../css/boardDetails.css"
 
 function BoardDetails() {
     const dispatch = useDispatch();
@@ -84,8 +85,8 @@ function BoardDetails() {
     }
 
     return (
-        <Container disableGutters={false} maxWidth="lg" sx={{ minHeight: "70vh", display: "flex", justifyContent: "space-evenly", flexDirection: 'column' }}>
-            <Grid2 container spacing={3} justifyItems="center" sx={{ width: "100%" }}>
+        <Container disableGutters={false} maxWidth="lg" className='board-details-container'>
+            <Grid2 container spacing={3} justifyItems="center" >
                 {displayFavourites()}
             </Grid2>
             <Typography>

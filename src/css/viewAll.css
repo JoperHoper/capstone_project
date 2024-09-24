@@ -1,0 +1,21 @@
+.movie-card-container {
+  max-width: 30vw;
+  min-height: 60vh;
+}
+
+.movie-card-container CardActionArea {
+  position: relative;
+}
+
+.movie-card-container span {
+  z-index: 50;
+  position: absolute;
+}
+
+.viewAll-container {
+  min-height: 120vh;
+}
+
+.viewAll-container Grid2 {
+  width: 100%;
+}

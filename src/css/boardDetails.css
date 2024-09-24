@@ -1,0 +1,10 @@
+.board-details-container {
+  min-height: 70vh;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+}
+
+.board-details-container Grid2 {
+  width: 100%;
+}

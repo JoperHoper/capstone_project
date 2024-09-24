@@ -148,7 +148,7 @@ function FilterByGenre() {
                 <div className='card-wrapper'>
                     {handleFilteredGenre()}
                 </div>
-                <div className="cards-btn-container" style={{ display: "flex", justifyItems: "center", justifyContent: "space-between", position: "relative", top: "-200px" }}>
+                <div className="cards-btn-container">
                     <button className='btn-left' onClick={handlePrev}>&lt;</button>
                     <button className='btn-right' onClick={handleNext}>&gt;</button>
                 </div>
@@ -157,7 +157,7 @@ function FilterByGenre() {
     }
 
     return (
-        <Container maxWidth="false" sx={{ minHeight: "40vh", marginTop: "20px", width: "100%" }}>
+        <Container className='cards-container' maxWidth="false">
             <Typography variant='typography.menu' color='text.primary'>
                 <h1>Classic in Action</h1>
             </Typography>

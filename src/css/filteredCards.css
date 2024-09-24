@@ -53,3 +53,9 @@ a {
   height: 1.5rem;
   background-color: #d1d5db;
 }
+
+.cards-container {
+  min-height: 40vh;
+  margin-top: 20px;
+  width: 100%;
+}

@@ -2,6 +2,7 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchMovies } from '../slices/movie'
+import "../css/randomiser.css"
 import { Box, Container, Typography, Card, CardMedia, CardContent, CardActionArea, CardActions } from '@mui/material'
 
 function RandomCards() {
@@ -26,8 +27,8 @@ function RandomCards() {
             console.log(movieArr[randomIndex])
 
             return (
-                <Card key={movieArr[randomIndex].movieId} sx={{ minWidth: '20vw', maxWidth: "40vw", minHeight: "50vh" }}>
-                    <CardActionArea sx={{ position: "relative" }}>
+                <Card key={movieArr[randomIndex].movieId} className="random-cards-container">
+                    <CardActionArea>
                         <CardMedia
                             component="img"
                             height="150"
@@ -48,8 +49,8 @@ function RandomCards() {
                                 <p><strong>Released: </strong>{movieArr[randomIndex].releaseDate}</p>
                             </Typography>
                         </CardContent>
-                        <CardActions sx={{ display: 'flex', justifyContent: "center" }}>
-                            <a style={{ color: "black", textDecoration: "none", fontSize: "15px", fontWeight: "bold" }} target='blank' href={movieArr[randomIndex].trailerUrl}>Watch Trailer</a>
+                        <CardActions className="random-cards-trailer">
+                            <a target='blank' href={movieArr[randomIndex].trailerUrl}>Watch Trailer</a>
                         </CardActions>
                     </CardActionArea>
                 </Card>
@@ -59,14 +60,14 @@ function RandomCards() {
     }
 
     return (
-        <Container maxWidth="false" sx={{ minHeight: "80vh", marginTop: "20px", width: "100%", textAlign: "center", display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
+        <Container maxWidth="false" className="randomiser-page-container">
             <Typography variant='typography.heading' color='text.primary'>
                 <h1>I'm Feeling... this movie tonight!</h1>
             </Typography>
-            <Box sx={{ display: "flex", justifyContent: "center", maxWidth: "30vw", padding: "20px" }}>
+            <Box className="randomiser-page-wrapper">
                 {randomizeCards()}
             </Box>
-            <button style={{ border: "none", cursor: "pointer", width: "10%", padding: "10px", borderRadius: "10px", fontSize: "15px", color: "white", backgroundColor: "#6464AE" }} onClick={getRandomMovies}>Randomize</button>
+            <button className="randomiser-btn" onClick={getRandomMovies}>Randomize</button>
         </Container>
     )
 }
