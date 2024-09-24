@@ -8,9 +8,67 @@ import "../css/navbar.css"
 import Link from '@mui/material/Link';
 import useLocalStorage from "../hook/useLocalStorage.jsx"
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchMovies } from '../slices/movie'
 
 function NavBar() {
     const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
+    const [searchResult, setSearchResult] = useState([]);
+    const dispatch = useDispatch();
+    const movie = useSelector((state) => state.movie)
+    const searchRef = useRef()
+    const searchDrop = useRef()
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        dispatch(fetchMovies())
+    }, [])
+
+    const handleSearch = () => {
+        if (searchRef.current.value.length > 0) {
+            let OGsearch = searchDrop.current.className
+            if (OGsearch.includes("hidden")) {
+                searchDrop.current.className = OGsearch.replace("hidden", "")
+                searchDrop.current.className = searchDrop.current.className.trim()
+            }
+            if (movie && movie.movieArr && Array.isArray(movie.movieArr)) {
+                let filteredSearch = movie.movieArr.filter((movieItem) => {
+                    return movieItem.movieTitle.toLowerCase().includes(searchRef.current.value)
+                })
+                setSearchResult(filteredSearch)
+            }
+        } else {
+            let OGsearch = searchDrop.current.className
+            if (!OGsearch.includes("hidden")) {
+                searchDrop.current.className = OGsearch + " hidden"
+            }
+        }
+    }
+
+    const viewMovieDetails = (e) => {
+        navigate("/movie/" + e.currentTarget.id)
+        window.location.reload()
+    }
+
+    const displaySearchResult = () => {
+        if (searchResult.length > 0) {
+            return searchResult.slice(0, 5).map((searchItem, index) => {
+                return (
+                    <>
+                        <div key={index} id={searchItem.movieId} onClick={viewMovieDetails} style={{ display: "flex", flexDirection: 'row', alignItems: "center", padding: "5px" }}>
+                            <img style={{ maxHeight: "60px", padding: "5px" }} src={searchItem.posterUrl} />
+                            <h3>{searchItem.movieTitle}</h3>
+                        </div>
+                        <Divider />
+                    </>
+                )
+            })
+        }
+        else {
+            return <div>No Match Found</div>
+        }
+    }
 
     const handleProfileDisplay = () => {
         if (accessToken !== "") {
@@ -24,20 +82,23 @@ function NavBar() {
     return (
         <div>
             <Grid container spacing={4} columns={16} sx={{ height: "10vh" }} >
-                <Grid display={'flex'} justifyContent={"center"} alignItems={'center'} size={3} style={{ border: "1px solid red" }}>
+                <Grid display={'flex'} justifyContent={"center"} alignItems={'center'} size={3} >
                     <a href='/'><img className='logo' style={{ height: "60px", width: "120px" }} src={logo} href="/" /></a>
                     <img className='app-icon' style={{ height: "50px", width: "50px" }} src={appIcon} />
                 </Grid>
-                <Grid display={'flex'} justifyContent={"flex-start"} alignItems={'center'} size={1} style={{ border: "1px solid red" }}>
+                <Grid display={'flex'} justifyContent={"flex-start"} alignItems={'center'} size={1}>
                     <TemporaryDrawer />
                 </Grid>
-                <Grid display={'flex'} justifyContent={"center"} alignItems={'center'} size={8} style={{ border: "1px solid red" }}>
-                    <div style={{ alignItems: "center", display: "flex", borderRadius: "8px", backgroundColor: "white", border: "1px solid yellow", width: "80%", padding: "6px 5px" }}>
+                <Grid display={'flex'} flexDirection={"column"} justifyContent={"center"} alignItems={'center'} size={8}>
+                    <div style={{ alignItems: "center", display: "flex", borderRadius: "8px", backgroundColor: "white", width: "80%", padding: "6px 5px" }}>
                         <span style={{ margin: "0px" }}><Search /></span>
-                        <input name='searchBar' type='search' placeholder='Find a movie...' id='searchBar' />
+                        <input ref={searchRef} onChange={handleSearch} name='searchBar' type='search' placeholder='Find a movie...' id='searchBar' />
+                    </div>
+                    <div className='search-dropdown hidden' ref={searchDrop} style={{ width: "40vw", position: "absolute", top: "55px", zIndex: "99", backgroundColor: "white" }}>
+                        {displaySearchResult()}
                     </div>
                 </Grid>
-                <Grid display={'flex'} justifyContent={"space-evenly"} alignItems={"center"} size={4} style={{ border: "1px solid red" }}>
+                <Grid display={'flex'} justifyContent={"space-evenly"} alignItems={"center"} size={4}>
                     <Typography variant='menu' color='text.primary'>
                         <Link underline='none' href="/favourites" color={'inherit'}>Favourites</Link>
                     </Typography>
@@ -48,7 +109,7 @@ function NavBar() {
                 </Grid>
             </Grid>
             <hr />
-        </div>
+        </div >
     )
 }
 
@@ -68,21 +129,24 @@ function TemporaryDrawer() {
         'Sign up'
     ]
 
-    const routing = () => {
-        console.log("here")
-        for (let i = 0; i < drawerRoute.length; i++) {
-            if (drawerRoute[i] === "View All") {
+    const routing = (e) => {
+        console.log(e.currentTarget)
+        switch (e.currentTarget.id) {
+            case "view-all":
                 navigate("/view-all")
-            }
-            if (drawerRoute[i] === "Movie Submission") {
+                break;
+            case "movie-submission":
                 navigate("/movie-request")
-            }
-            if (drawerRoute[i] === "I\'m Feeling...") {
+                break;
+            case "i-m-feeling-":
                 navigate("/randomizer")
-            }
-            if (drawerRoute[i] === "Sign up") {
+                break;
+            case "sign-up":
                 navigate("/signup")
-            }
+                break;
+            case "about":
+                navigate("/about")
+                break;
         }
     }
 
@@ -92,7 +156,7 @@ function TemporaryDrawer() {
                 <List>
                     {drawerRoute.slice(0, 3).map((text, index) => (
                         <ListItem key={index} variant="menu" disablePadding>
-                            <ListItemButton onClick={routing}>
+                            <ListItemButton id={text.replace(new RegExp(/[\s\'.]+/g), "-").toLowerCase()} onClick={routing}>
                                 <ListItemText primary={text} color='secondary.main' />
                             </ListItemButton>
                         </ListItem>
@@ -102,7 +166,7 @@ function TemporaryDrawer() {
                 <List>
                     {drawerRoute.slice(3).map((text, index) => (
                         <ListItem key={index} disablePadding>
-                            <ListItemButton onClick={routing}>
+                            <ListItemButton id={text.replace(new RegExp(/[\s\'.]+/g), "-").toLowerCase()} onClick={routing}>
                                 <ListItemText primary={text} />
                             </ListItemButton>
                         </ListItem>

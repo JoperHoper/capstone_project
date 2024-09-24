@@ -84,15 +84,19 @@ function FilterByYear() {
         }
     }
 
+    const viewMovieDetails = (e) => {
+        navigate("/movie/" + e.currentTarget.id)
+    }
+
     const handleFilteredYears = () => {
         console.log(filteredArr)
         if (filteredArr && Array.isArray(filteredArr)) {
             return filteredArr.slice(currentIndex, currentIndex + 5).map((card, index) => (
                 <div className='card' key={index}>
-                    <span style={{ zIndex: "10", position: "absolute", border: "2px solid red" }}>
+                    <span style={{ zIndex: "10", position: "absolute" }}>
                         {favouriteIcon(card.movieId)}
                     </span>
-                    <img className='' src={card.posterUrl} alt="Card" />
+                    <img className='' src={card.posterUrl} alt="Card" id={card.movieId} onClick={viewMovieDetails} />
                     <span>
                         <Typography variant='text.primary'>
                             <Box className="trailer-btn">
@@ -149,7 +153,7 @@ function FilterByYear() {
     }
 
     return (
-        <Container maxWidth="false" sx={{ minHeight: "40vh", border: "1px solid red", marginTop: "20px", width: "100%" }}>
+        <Container maxWidth="false" sx={{ minHeight: "40vh", marginTop: "20px", width: "100%", marginBottom: "10vh" }}>
             <Typography variant='typography.menu' color='text.primary'>
                 <h1>In the 20's</h1>
             </Typography>

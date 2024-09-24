@@ -7,7 +7,7 @@ import Footer from './Footer'
 
 function Login() {
     return (
-        <Container disableGutters={true} maxWidth="false" sx={{ bgcolor: "background.default" }} className='login-container' >
+        <Container disableGutters={true} maxWidth="false" className='login-container' >
             <NavBar />
             <LoginForm />
             <Footer />

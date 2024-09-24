@@ -3,3 +3,13 @@ body {
   padding: 0 !important;
   position: relative;
 }
+
+.all-containers {
+  background: rgb(31, 30, 51);
+  background: linear-gradient(
+    349deg,
+    rgba(31, 30, 51, 1) 0%,
+    rgba(69, 68, 113, 1) 35%,
+    rgba(31, 30, 51, 1) 100%
+  );
+}

@@ -5,7 +5,6 @@ const initialState = { loading: true, favInBoardArr: [], error: '' }
 
 export const fetchFavInBoard =
     createAsyncThunk("fetchFavInBoard", async (input) => {
-        console.log(input)
         return axios.get("http://localhost:8000/board_favourite/get",
             {
                 boardId: input.boardId,

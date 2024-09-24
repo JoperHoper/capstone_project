@@ -4,22 +4,17 @@ import NavBar from './NavBar'
 import Footer from './Footer'
 import "../css/account.css"
 import kittenImg from "../assets/Kitten.jpg"
-import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux'
+import useLocalStorage from "../hook/useLocalStorage";
+import { fetchUser } from '../slices/userSlicer'
+import { useNavigate } from 'react-router-dom'
+import { updateCurrentUser } from '../slices/updateUserSlicer'
 
 function Account() {
-    // const userInfo = axios.get("http://localhost:8000/user/:id")
-    // .then()
-
-
     return (
-        <Container disableGutters={true} maxWidth="false" sx={{ bgcolor: "background.default" }} className='acc-container'>
+        <Container disableGutters={true} maxWidth="false" className='acc-container'>
             <NavBar />
-            <Typography>
-                <Box color="text.primary">
-                    <h2>Welcome, User!</h2>
-                </Box>
-            </Typography>
-            <Container disableGutters={true} maxWidth="lg" sx={{ border: "1px solid yellow", height: "110vh", display: "flex", justifyContent: "center" }}>
+            <Container disableGutters={true} maxWidth="lg" sx={{ height: "110vh", display: "flex", justifyContent: "center" }}>
                 <Profile />
             </Container>
             <Footer />
@@ -29,21 +24,46 @@ function Account() {
 
 function Profile() {
     const [isEditing, setIsEditing] = useState(false);
+    const [isSaveToDB, setIsSaveToDB] = useState(false);
     const [btnTxt, setBtnTxt] = useState("Edit")
-    const [name, setName] = useState("Jane Susan")
-    const [email, setEmail] = useState("Jane.S@test.com")
+    const [name, setName] = useState("")
+    const [email, setEmail] = useState("")
     const [birthday, setBirthday] = useState("")
     const [bio, setBio] = useState("")
+    const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
     const nameValue = useRef();
     const emailValue = useRef();
     const dateValue = useRef();
     const bioValue = useRef();
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.user)
+    const updateUser = useSelector((state) => state.updateUser)
+    const navigate = useNavigate()
 
     const nameValueField = nameValue.current
     const emailValueField = emailValue.current
     const birthdayValueField = dateValue.current
     const bioValueField = bioValue.current
 
+    useEffect(() => {
+        dispatch(fetchUser({ accessToken: accessToken }))
+    }, [])
+
+    useEffect(() => {
+        if (user.userArr === 401 || user.userArr === 403) {
+            setAccessToken("")
+            setTimeout(() => {
+                navigate("/login")
+            }, 500)
+        }
+        else {
+            setName(user.userArr.name)
+            setEmail(user.userArr.email)
+            let userDOB = new Date(user.userArr.dob)
+            setBirthday(userDOB.getFullYear() + "-" + (userDOB.getMonth() < 9 ? '0' + (userDOB.getMonth() + 1) : (userDOB.getMonth() + 1)) + "-" + (userDOB.getDate() < 10 ? "0" + userDOB.getDate() : userDOB.getDate()))
+            setBio(user.userArr.bio)
+        }
+    }, [user])
 
     useEffect(() => {
         if (isEditing) {
@@ -51,6 +71,16 @@ function Profile() {
         }
         else {
             setBtnTxt("Edit");
+            if (isSaveToDB) {
+                dispatch(updateCurrentUser({
+                    accessToken: accessToken,
+                    bio: bio,
+                    name: name,
+                    email: email,
+                    dob: birthday
+                }))
+            }
+            setIsSaveToDB(false)
         }
     }, [isEditing, btnTxt, name, email, birthday, bio])
 
@@ -58,15 +88,19 @@ function Profile() {
         if (isEditing) {
             if (nameValueField.value !== "") {
                 setName(nameValueField.value)
+                setIsSaveToDB(true)
             }
             if (emailValueField.value !== "") {
                 setEmail(emailValueField.value)
+                setIsSaveToDB(true)
             }
             if (birthdayValueField.value !== "") {
                 setBirthday(birthdayValueField.value)
+                setIsSaveToDB(true)
             }
             if (bioValueField.value !== "") {
                 setBio(bioValueField.value)
+                setIsSaveToDB(true)
             }
         }
         setIsEditing(!isEditing)
@@ -74,7 +108,7 @@ function Profile() {
 
     return (
         <Container disableGutters={true} maxWidth="md" className='details-container'>
-            <Typography sx={{ typography: "p", color: "text.primary" }}>
+            <Typography variant="typography.p" color="text.primary">
                 <Box className="profile-pic-container">
                     <div className='profile-ring'>
                         <img src={kittenImg} />
@@ -102,7 +136,7 @@ function Profile() {
                     <button className='acc-btn' onClick={handleEdit}>{btnTxt}</button>
                 </Box>
                 <Container disableGutters={true} maxWidth="md" className='bio-container-2' sx={{ color: "text.primary" }}>
-                    <Box sx={{ border: "1px solid yellow", width: "50%", height: "inherit", float: "left", textAlign: "left" }}>
+                    <Box sx={{ width: "50%", height: "inherit", float: "left", textAlign: "left" }}>
                         <h3 style={{ margin: "0" }}>Name</h3>
                         <hr className='acc-divider' /><br />
                         <div className='value-input-container'>
@@ -114,7 +148,7 @@ function Profile() {
                             {isEditing ? <input placeholder='Enter Birthday' ref={dateValue} type='date' /> : <p>{birthday}</p>}
                         </div>
                     </Box>
-                    <Box sx={{ border: "1px solid yellow", width: "49%", height: "inherit", float: "right" }}>
+                    <Box sx={{ width: "49%", height: "inherit", float: "right" }}>
                         <h3 style={{ margin: "0" }}>Email</h3>
                         <hr className='acc-divider' /><br />
                         <div className='value-input-container'>
@@ -161,34 +195,11 @@ const Tags = () => {
                 <TextField
                     {...params}
                     variant="standard"
-                    placeholder="Favorites"
+                    placeholder="Add Favourites"
                 />
             )}
         />
     )
 }
-
-// const UploadAvatar = () => {
-//     const [picture, setPicture] = useState();
-
-//     const handleUpload = (e) => {
-//         console.log(e.target.files)
-//         console.log(JSON.stringify(e.target.files))
-//         setPicture(URL.createObjectURL(e.target.files[0]));
-//     }
-
-//     return (
-//         <>
-//             <label htmlFor='img'></label>
-//             {/* <input
-//                 name='img'
-//                 type='file'
-//                 accept="image/*"
-//                 onChange={handleUpload}
-//                 className='img-input'
-//             /> */}
-//         </>
-//     )
-// }
 
 export default Account

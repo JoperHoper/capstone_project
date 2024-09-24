@@ -7,7 +7,7 @@ import Footer from './Footer'
 
 function Signup() {
     return (
-        <Container disableGutters={true} maxWidth="false" sx={{ bgcolor: "background.default" }} className='signup-container' >
+        <Container disableGutters={true} maxWidth="false" className='signup-container' >
             <NavBar />
             <SignUpForm />
             <Footer />

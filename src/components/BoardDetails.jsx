@@ -1,8 +1,8 @@
 import React from 'react'
-import { Container, Grid2, Card, Typography, CardMedia, CardContent, CardActionArea, CardActions } from '@mui/material'
+import { Button, Container, Grid2, Card, Typography, CardMedia, CardContent, CardActionArea, CardActions } from '@mui/material'
 import { fetchFavInBoard } from '../slices/favToBoardSlicer'
 import { fetchFavourites } from '../slices/favourite'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import useLocalStorage from "../hook/useLocalStorage";
 import { useParams } from 'react-router-dom'
@@ -10,6 +10,7 @@ import { useParams } from 'react-router-dom'
 function BoardDetails() {
     const dispatch = useDispatch();
     const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
+    const [viewMore, setViewMore] = useState(false)
     const favourite = useSelector((state) => state.favourite)
     const favToBoard = useSelector((state) => state.favToBoard)
     const splat = useParams()["*"];
@@ -20,13 +21,18 @@ function BoardDetails() {
     }, [])
 
     useEffect(() => {
-        console.log(favToBoard)
+        if (favToBoard && (favToBoard.favInBoardArr === 403 || favToBoard.favInBoardArr === 401)) {
+            setAccessToken("")
+            setTimeout(() => {
+                navigate("/login")
+            }, 500)
+        }
         let favIds = []
         if (favToBoard && favToBoard.favInBoardArr && Array.isArray(favToBoard.favInBoardArr)) {
+
             for (let i = 0; i < favToBoard.favInBoardArr.length; i++) {
                 favIds.push(favToBoard.favInBoardArr[i].favouriteId)
             }
-            console.log(favIds.toString())
             dispatch(fetchFavourites({ favouriteIds: favIds.toString(), accessToken: accessToken }))
         }
     }, [favToBoard])
@@ -35,9 +41,17 @@ function BoardDetails() {
         console.log(favourite)
     }, [favourite])
 
+    const handleCards = () => {
+        setViewMore(true)
+    }
+
     const displayFavourites = () => {
+        let favDisplay = [...favourite.favArr];
         if (favourite && favourite.favArr && Array.isArray(favourite.favArr)) {
-            return favourite.favArr.map((fav) => {
+            if (!viewMore) {
+                favDisplay = favDisplay.slice(0, 12);
+            }
+            return favDisplay.map((fav) => {
                 let movie = fav.movie
                 return (
                     <Grid2 size={{ xs: 4, md: 2 }} key={movie.movieId}>
@@ -70,11 +84,13 @@ function BoardDetails() {
     }
 
     return (
-        <Container disableGutters={false} maxWidth="lg" sx={{ border: "1px solid red", minHeight: "70vh", display: "flex", justifyContent: "space-evenly" }}>
-            <Grid2 container spacing={3} justifyItems="center" sx={{ border: "1px solid green", width: "100%" }}>
+        <Container disableGutters={false} maxWidth="lg" sx={{ minHeight: "70vh", display: "flex", justifyContent: "space-evenly", flexDirection: 'column' }}>
+            <Grid2 container spacing={3} justifyItems="center" sx={{ width: "100%" }}>
                 {displayFavourites()}
             </Grid2>
-
+            <Typography>
+                {viewMore ? null : <Button sx={{ color: "#faf8f6", float: 'right', fontSize: "medium" }} onClick={handleCards}>View More</Button>}
+            </Typography>
         </Container>
     )
 }

@@ -59,11 +59,11 @@ function RandomCards() {
     }
 
     return (
-        <Container maxWidth="false" sx={{ minHeight: "80vh", border: "1px solid red", marginTop: "20px", width: "100%", textAlign: "center", display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
+        <Container maxWidth="false" sx={{ minHeight: "80vh", marginTop: "20px", width: "100%", textAlign: "center", display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
             <Typography variant='typography.heading' color='text.primary'>
                 <h1>I'm Feeling... this movie tonight!</h1>
             </Typography>
-            <Box sx={{ display: "flex", justifyContent: "center", maxWidth: "30vw", border: "1px solid green", padding: "20px" }}>
+            <Box sx={{ display: "flex", justifyContent: "center", maxWidth: "30vw", padding: "20px" }}>
                 {randomizeCards()}
             </Box>
             <button style={{ border: "none", cursor: "pointer", width: "10%", padding: "10px", borderRadius: "10px", fontSize: "15px", color: "white", backgroundColor: "#6464AE" }} onClick={getRandomMovies}>Randomize</button>

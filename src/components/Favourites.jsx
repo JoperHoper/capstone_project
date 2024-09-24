@@ -6,7 +6,7 @@ import FavouriteBoard from "../components/FavouriteBoard"
 
 function Favourites() {
     return (
-        <Container disableGutters={true} maxWidth="false" sx={{ bgcolor: "background.default", minHeight: "100vh" }}>
+        <Container disableGutters={true} maxWidth="false" className='all-containers' sx={{ minHeight: "100vh" }}>
             <NavBar />
             <FavouriteBoard />
             <Footer />
