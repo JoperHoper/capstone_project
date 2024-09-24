@@ -7,6 +7,7 @@ import pubkey from "../../public/id_rsa_capstone.txt";
 import 'react-toastify/dist/ReactToastify.css';
 import "../css/signup.css"
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
 
 function SignUpForm() {
     return (
@@ -31,10 +32,11 @@ function SignupInput() {
     const [type, setType] = useState('password');
     const [icon, setIcon] = useState(<VisibilityOff />)
     const username = useRef();
-    const firstName = useRef();
-    const lastName = useRef();
+    const name = useRef();
+    const navigate = useNavigate();
 
     const noMatchPwd = () => {
+        setUserSubmit(false)
         toast.error("Password does not match");
         setTimeout(() => {
             toast.clearWaitingQueue();
@@ -42,6 +44,7 @@ function SignupInput() {
     };
 
     const invalidUserPass = () => {
+        setUserSubmit(false)
         toast.error("Invalid Password");
         setTimeout(() => {
             toast.clearWaitingQueue();
@@ -50,6 +53,9 @@ function SignupInput() {
 
     const success = () => {
         toast.success("Submitted");
+        setTimeout(() => {
+            navigate("/login")
+        }, 3000);
     };
 
     const handleToggle = () => {
@@ -82,12 +88,8 @@ function SignupInput() {
     }
 
     useEffect(() => {
-        console.log("validEmail:", validEmail)
-        console.log("validPassword", validPassword)
         if (userSubmit) {
             if (validPassword && validEmail) {
-                console.log(password)
-                console.log(rePassword)
                 if (password == rePassword) {
                     fetch(pubkey).then(row => row.text()).then(publicKeyRSA => {
                         let forgepublicKey = forge.pki.publicKeyFromPem(publicKeyRSA);
@@ -95,8 +97,7 @@ function SignupInput() {
                         let encryptedData = forgepublicKey.encrypt(password);
                         let hexValue = forge.util.bytesToHex(encryptedData)
                         axios.post("http://localhost:8000/user/create", {
-                            firstName: firstName.current.value,
-                            lastName: lastName.current.value,
+                            name: name.current.value,
                             username: username.current.value,
                             email: email,
                             password: hexValue
@@ -131,27 +132,15 @@ function SignupInput() {
             <Container disableGutters={true} maxWidth="md" sx={{ color: "text.primary", typography: "menu" }}>
                 <form className='su-form-container'>
                     {/* FName input */}
-                    <label htmlFor="fname" color='text.primary'>First Name</label>
+                    <label htmlFor="name" color='text.primary'>Name</label>
                     <input
                         type='text'
                         placeholder='Enter Name'
-                        name='fname'
+                        name='name'
                         maxLength={30}
                         required
-                        ref={firstName}
+                        ref={name}
                         autoComplete="given-name"
-                        className='su-input-field'
-                    />
-                    {/* LName input */}
-                    <label htmlFor="lname" color='text.primary'>Last Name</label>
-                    <input
-                        type='text'
-                        placeholder='Enter Last Name'
-                        name='lname'
-                        maxLength={30}
-                        required
-                        ref={lastName}
-                        autoComplete="family-name"
                         className='su-input-field'
                     />
                     {/* Email input */}

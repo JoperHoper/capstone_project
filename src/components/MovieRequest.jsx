@@ -7,7 +7,7 @@ import "../css/movie-request.css"
 
 function MovieRequest() {
     return (
-        <Container disableGutters={true} maxWidth="false" sx={{ bgcolor: "background.default" }} className='request-container'>
+        <Container disableGutters={true} maxWidth="false" className='request-container'>
             <NavBar />
             <RequestForm />
             <Footer />

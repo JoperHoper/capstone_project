@@ -7,6 +7,7 @@ import { createFavourites } from '../slices/createFavourite'
 import { Box, Container, Typography } from '@mui/material'
 import { FavoriteBorder, Favorite } from '@mui/icons-material'
 import useLocalStorage from "../hook/useLocalStorage";
+import { useNavigate } from "react-router-dom";
 import "../css/filteredCards.css"
 
 function FilterByGenre() {
@@ -18,6 +19,7 @@ function FilterByGenre() {
     const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
     const [currentIndex, setCurrentIndex] = useState(0);
     let filteredByGenre = [];
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(fetchMovies())
@@ -87,14 +89,18 @@ function FilterByGenre() {
         }
     }
 
+    const viewMovieDetails = (e) => {
+        navigate("/movie/" + e.currentTarget.id)
+    }
+
     const handleFilteredGenre = () => {
         if (filteredByGenre && Array.isArray(filteredByGenre)) {
             return filteredByGenre.slice(currentIndex, currentIndex + 5).map((card, index) => (
                 <div className='card' key={index}>
-                    <span style={{ zIndex: "10", position: "absolute", border: "2px solid red" }}>
+                    <span style={{ zIndex: "10", position: "absolute" }}>
                         {favouriteIcon(card.movieId)}
                     </span>
-                    <img className='' src={card.posterUrl} alt="Card" />
+                    <img className='' src={card.posterUrl} alt="Card" id={card.movieId} onClick={viewMovieDetails} />
                     <span>
                         <Typography variant='text.primary'>
                             <Box className="trailer-btn">
@@ -151,7 +157,7 @@ function FilterByGenre() {
     }
 
     return (
-        <Container maxWidth="false" sx={{ minHeight: "40vh", border: "1px solid red", marginTop: "20px", width: "100%" }}>
+        <Container maxWidth="false" sx={{ minHeight: "40vh", marginTop: "20px", width: "100%" }}>
             <Typography variant='typography.menu' color='text.primary'>
                 <h1>Classic in Action</h1>
             </Typography>

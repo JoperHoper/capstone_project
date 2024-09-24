@@ -30,7 +30,7 @@ function ViewAllCards() {
 
     useEffect(() => {
         console.log(createFavourite)
-        if (createFavourite.favArr === 403) {
+        if (createFavourite.favArr === 403 || createFavourite.favArr === 401) {
             setAccessToken("")
             setTimeout(() => {
                 navigate("/login")
@@ -78,6 +78,10 @@ function ViewAllCards() {
         }
     }
 
+    const viewMovieDetails = (e) => {
+        navigate("/movie/" + e.currentTarget.id)
+    }
+
     const cards = () => {
         if (movie.loading) {
             return <div>Loading...</div>
@@ -89,9 +93,9 @@ function ViewAllCards() {
         return movieDisplay.map((movie) => {
             return <Grid2 size={{ xs: 4, md: 2 }} key={movie.movieId}>
                 <Card sx={{ maxWidth: "30vw", minHeight: "60vh" }}>
-                    <CardActionArea sx={{ position: "relative" }}>
+                    <CardActionArea sx={{ position: "relative" }}  >
                         <Typography>
-                            <span style={{ zIndex: "10", position: "absolute", border: "2px solid red" }}>
+                            <span style={{ zIndex: "50", position: "absolute" }}>
                                 {favouriteIcon(movie.movieId)}
                             </span>
                         </Typography>
@@ -100,6 +104,8 @@ function ViewAllCards() {
                             height="150"
                             image={movie.posterUrl}
                             alt={movie.movieTitle}
+                            id={movie.movieId}
+                            onClick={viewMovieDetails}
                         />
                         <CardContent>
                             <Typography variant="h6" component="div" color='black' sx={{ lineHeight: 1.2 }}>
@@ -122,7 +128,7 @@ function ViewAllCards() {
 
     return (
         <Container maxWidth="lg" sx={{ minHeight: "120vh" }}>
-            <Grid2 container spacing={3} justifyItems="center" sx={{ border: "1px solid green", width: "100%" }}>
+            <Grid2 container spacing={3} justifyItems="center" sx={{ width: "100%" }}>
                 {cards()}
             </Grid2>
             <Typography>

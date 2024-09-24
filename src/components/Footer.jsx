@@ -15,7 +15,7 @@ function Footer() {
                     </Box>
                 </Box>
                 <Box className='footer-container' sx={{ typography: "p" }}>
-                    <p>About</p>
+                    <a href='/about'><p>About</p></a>
                     <a href='/account'><p>Account</p></a>
                 </Box>
             </footer>

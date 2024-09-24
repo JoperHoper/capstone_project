@@ -9,7 +9,7 @@ import FIlterByGenre from '../cards/FIlterByGenre'
 
 function Homepage() {
     return (
-        <Container disableGutters={true} maxWidth="false" sx={{ bgcolor: "background.default", minHeight: "220vh" }} className='homepage-container' >
+        <Container disableGutters={true} maxWidth="false" sx={{ minHeight: "220vh" }} className='homepage-container' >
             <NavBar />
             <HomepageCarousel />
             <FilterByYear />

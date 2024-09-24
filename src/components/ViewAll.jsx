@@ -7,7 +7,7 @@ import ViewAllCards from '../cards/ViewAllCards'
 function ViewAll() {
 
     return (
-        <Container disableGutters={true} maxWidth="false" sx={{ bgcolor: "background.default", justifyContent: "center", minHeight: "155vh", paddingBottom: "15vh" }} className='viewAll-container'>
+        <Container disableGutters={true} maxWidth="false" className='all-containers' sx={{ minHeight: "155vh", paddingBottom: "15vh" }}>
             <NavBar />
             <ViewAllCards />
             <Footer />

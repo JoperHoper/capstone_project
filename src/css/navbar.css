@@ -23,6 +23,10 @@
   border: 1px solid yellow;
 }
 
+.hidden {
+  display: none;
+}
+
 .vl {
   border-left: 1px solid #faf8f6;
   height: 20px;
