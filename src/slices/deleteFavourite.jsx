@@ -3,10 +3,10 @@ import axios from "axios";
 
 const initialState = { loading: true, favArr: [], error: '' }
 
-export const createFavourites =
-    createAsyncThunk("createfavourites", async (input) => {
+export const deleteFavourites =
+    createAsyncThunk("deletefavourites", async (input) => {
         console.log(input)
-        return axios.post("http://localhost:8000/favourite/create",
+        return axios.post("http://localhost:8000/favourite/delete",
             {
                 movieId: input.movieId
             },
@@ -24,19 +24,19 @@ export const createFavourites =
             })
     })
 
-const createFavouriteSlice = createSlice({
-    name: "createFavourite",
+const deleteFavouriteSlice = createSlice({
+    name: "deletefavourites",
     initialState,
     extraReducers: (builder) => {
-        builder.addCase(createFavourites.pending, (state) => {
+        builder.addCase(deleteFavourites.pending, (state) => {
             state.loading = true
         })
-        builder.addCase(createFavourites.fulfilled, (state, action) => {
+        builder.addCase(deleteFavourites.fulfilled, (state, action) => {
             state.loading = false
             state.favArr = action.payload
             state.error = ""
         })
-        builder.addCase(createFavourites.rejected, (state, action) => {
+        builder.addCase(deleteFavourites.rejected, (state, action) => {
             state.loading = false
             state.favArr = []
             state.error = action.error
@@ -44,5 +44,4 @@ const createFavouriteSlice = createSlice({
     }
 })
 
-export default createFavouriteSlice.reducer
-
+export default deleteFavouriteSlice.reducer
