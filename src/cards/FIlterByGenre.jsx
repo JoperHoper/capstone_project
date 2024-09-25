@@ -35,7 +35,6 @@ function FilterByGenre() {
             for (let i = 0; i < movie.movieArr.length; i++) {
                 for (let j = 0; j < movie.movieArr[i].genres.length; j++) {
                     if (movie.movieArr[i].genres[j].genre === "Action") {
-                        console.log(movie.movieArr[i].genres[j].genre)
                         filteredByGenre.push(movie.movieArr[i])
                     }
                 }
@@ -44,7 +43,6 @@ function FilterByGenre() {
     }
 
     useEffect(() => {
-        console.log(createFavourite)
         if (createFavourite.favArr === 403) {
             setAccessToken("")
             setTimeout(() => {

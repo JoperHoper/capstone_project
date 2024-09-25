@@ -5,10 +5,9 @@ const initialState = { loading: true, favArr: [], error: '' }
 
 export const deleteFavourites =
     createAsyncThunk("deletefavourites", async (input) => {
-        console.log(input)
         return axios.post("http://localhost:8000/favourite/delete",
             {
-                movieId: input.movieId
+                favouriteId: input.favouriteId
             },
             {
                 headers: {
@@ -25,7 +24,7 @@ export const deleteFavourites =
     })
 
 const deleteFavouriteSlice = createSlice({
-    name: "deletefavourites",
+    name: "deleteFavourites",
     initialState,
     extraReducers: (builder) => {
         builder.addCase(deleteFavourites.pending, (state) => {

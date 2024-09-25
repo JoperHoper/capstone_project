@@ -24,8 +24,6 @@ function RandomCards() {
             return <div>Loading...</div>
         }
         if (movieArr[randomIndex]) {
-            console.log(movieArr[randomIndex])
-
             return (
                 <Card key={movieArr[randomIndex].movieId} className="random-cards-container">
                     <CardActionArea>

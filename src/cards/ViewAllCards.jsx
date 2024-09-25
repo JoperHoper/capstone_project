@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchMovies } from '../slices/movie'
 import { fetchFavourites } from '../slices/favourite'
+import { deleteFavourites } from '../slices/deleteFavourite'
 import { createFavourites } from '../slices/createFavourite'
 import { Button, Container, Grid2, Card, Typography, CardMedia, CardContent, CardActionArea, CardActions } from '@mui/material'
 import { FavoriteBorder, Favorite } from '@mui/icons-material'
@@ -15,14 +16,16 @@ function ViewAllCards() {
     const movie = useSelector((state) => state.movie)
     const favourite = useSelector((state) => state.favourite)
     const createFavourite = useSelector((state) => state.createFavourite)
+    const deleteFavourite = useSelector((state) => state.deleteFavourites)
     const [viewMore, setViewMore] = useState(false)
     const [favoriteMap, setFavoriteMap] = useState({})
+    const [movieToFavouriteMap, setMovieToFavouriteMap] = useState({})
     const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
     const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(fetchMovies())
-        dispatch(fetchFavourites())
+        dispatch(fetchFavourites({ accessToken: accessToken }))
     }, [])
 
     useEffect(() => {
@@ -30,7 +33,6 @@ function ViewAllCards() {
     }, [favourite])
 
     useEffect(() => {
-        console.log(createFavourite)
         if (createFavourite.favArr === 403 || createFavourite.favArr === 401) {
             setAccessToken("")
             setTimeout(() => {
@@ -44,14 +46,18 @@ function ViewAllCards() {
     }
 
     const setUpFavouriteMap = () => {
-        if (favourite?.favArr?.length > 0) {
-            let temp = {}
-            favourite.favArr.map((data) => {
-                temp[data.movieId] = true
-            })
-            setFavoriteMap(temp)
+        if (favourite && favourite.favArr && Array.isArray(favourite.favArr)) {
+            if (favourite?.favArr?.length > 0) {
+                let favMovieMap = {}
+                let movieToFavMap = {}
+                favourite.favArr.map((data) => {
+                    favMovieMap[data.movieId] = true
+                    movieToFavMap[data.movieId.toString()] = data.favouriteId
+                })
+                setFavoriteMap(favMovieMap)
+                setMovieToFavouriteMap(movieToFavMap)
+            }
         }
-
     }
 
     const handleFavourite = (e) => {
@@ -63,14 +69,23 @@ function ViewAllCards() {
         } else {
             latestFavMap[movieId] = !latestFavMap[e.currentTarget.dataset.id]
             if (latestFavMap[movieId]) {
-                dispatch(createFavourites(movieId, accessToken))
+                dispatch(createFavourites({ movieId: movieId, accessToken: accessToken }))
+            }
+            else {
+                if (movieToFavouriteMap) {
+                    let favouriteId = movieToFavouriteMap[movieId]
+                    dispatch(deleteFavourites({ favouriteId: favouriteId, accessToken: accessToken }))
+                    let updatedFavMap = movieToFavouriteMap
+                    updatedFavMap[movieId] = undefined
+                    setMovieToFavouriteMap(updatedFavMap)
+                    setFavoriteMap(latestFavMap)
+                }
             }
         }
         setFavoriteMap(latestFavMap)
     }
 
     const favouriteIcon = (movieId) => {
-        // console.log(favoriteMap)
         if (favoriteMap[movieId]) {
             return <Favorite data-id={movieId} color='primary' onClick={handleFavourite} />
         }

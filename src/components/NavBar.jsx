@@ -130,7 +130,6 @@ function TemporaryDrawer() {
     ]
 
     const routing = (e) => {
-        console.log(e.currentTarget)
         switch (e.currentTarget.id) {
             case "view-all":
                 navigate("/view-all")

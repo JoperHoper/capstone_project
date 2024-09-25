@@ -39,7 +39,6 @@ function FilterByYear() {
     }
 
     useEffect(() => {
-        console.log(createFavourite)
         if (createFavourite.favArr === 403) {
             setAccessToken("")
             setTimeout(() => {
@@ -89,7 +88,6 @@ function FilterByYear() {
     }
 
     const handleFilteredYears = () => {
-        console.log(filteredArr)
         if (filteredArr && Array.isArray(filteredArr)) {
             return filteredArr.slice(currentIndex, currentIndex + 5).map((card, index) => (
                 <div className='card' key={index}>

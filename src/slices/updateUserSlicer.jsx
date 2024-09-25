@@ -5,7 +5,6 @@ const initialState = { loading: true, userArr: [], error: '' }
 
 export const updateCurrentUser =
     createAsyncThunk("updateCurrentUser", async (input) => {
-        console.log(input)
         return axios.post("http://localhost:8000/user/update",
             {
                 bio: input.bio,
@@ -19,7 +18,6 @@ export const updateCurrentUser =
                 }
             })
             .then((res) => {
-                console.log(res)
                 return res.data.data
             })
             .catch((error) => {

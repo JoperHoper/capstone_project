@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 export default function useLocalStorage(key, initialObj) {
     const [obj, setObj] = useState(() => {
-        console.log(initialObj)
         return getSavedObj(key, initialObj)
     })
 
@@ -16,12 +15,9 @@ export default function useLocalStorage(key, initialObj) {
 }
 
 const getSavedObj = (key, initialObj) => {
-    console.log(key)
     if (typeof window !== 'undefined') {
         const savedObj = localStorage.getItem(key);
         if (savedObj && savedObj !== undefined && savedObj !== 'undefined') {
-
-            console.log(savedObj)
             return JSON.parse(savedObj);
         }
     }
