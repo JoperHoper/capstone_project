@@ -16,7 +16,6 @@ function BoardDetails() {
     const favToBoard = useSelector((state) => state.favToBoard)
     const splat = useParams()["*"];
 
-    console.log(splat)
     useEffect(() => {
         dispatch(fetchFavInBoard({ boardId: splat, accessToken: accessToken }));
     }, [])
@@ -38,17 +37,13 @@ function BoardDetails() {
         }
     }, [favToBoard])
 
-    useEffect(() => {
-        console.log(favourite)
-    }, [favourite])
-
     const handleCards = () => {
         setViewMore(true)
     }
 
     const displayFavourites = () => {
-        let favDisplay = [...favourite.favArr];
         if (favourite && favourite.favArr && Array.isArray(favourite.favArr)) {
+            let favDisplay = [...favourite.favArr];
             if (!viewMore) {
                 favDisplay = favDisplay.slice(0, 12);
             }

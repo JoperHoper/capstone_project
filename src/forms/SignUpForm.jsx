@@ -72,19 +72,16 @@ function SignupInput() {
         e.preventDefault()
         let retypePwd = e.target.value
         setRePassword(retypePwd)
-        console.log(rePassword)
     }
 
     const handlepwd = (e) => {
         e.preventDefault();
         setPassword(e.target.value)
-        console.log(password)
     }
 
     const handleEmail = (e) => {
         e.preventDefault();
         setEmail(e.target.value)
-        console.log(email)
     }
 
     useEffect(() => {
@@ -102,9 +99,6 @@ function SignupInput() {
                             email: email,
                             password: hexValue
                         })
-                            .then((data) => {
-                                console.log(data)
-                            })
                     })
                     success();
                 }

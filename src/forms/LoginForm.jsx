@@ -57,7 +57,6 @@ function LoginInput() {
                 password: hexValue
             })
                 .then((data) => {
-                    console.log(data.data.data)
                     let retrieveAccessToken = data.data.data
                     setAccessToken(retrieveAccessToken)
                     setTimeout(() => {
@@ -80,7 +79,7 @@ function LoginInput() {
                         maxLength={12}
                         required
                         ref={username}
-                        autoComplete='username'
+                        autoComplete='none'
                         className='input-field'
                     />
                     {/* Password input */}

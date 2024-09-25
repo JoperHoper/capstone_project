@@ -11,7 +11,6 @@ export const fetchUser =
             }
         })
             .then((res) => {
-                console.log(res)
                 return res.data.data
             })
             .catch((error) => {

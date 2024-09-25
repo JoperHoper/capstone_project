@@ -28,7 +28,6 @@ const favouriteSlice = createSlice({
             state.loading = true
         })
         builder.addCase(fetchFavourites.fulfilled, (state, action) => {
-            console.log("hehe")
             state.loading = false
             state.favArr = action.payload
             state.error = ""

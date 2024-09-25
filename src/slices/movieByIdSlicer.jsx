@@ -5,7 +5,6 @@ const initialState = { loading: true, movieItem: {}, error: '' }
 
 export const fetchMovieById =
     createAsyncThunk("fetchMovieById", async (input) => {
-        console.log(input)
         return axios.get("http://localhost:8000/movie/get_by_id",
             {
                 params: {
@@ -14,7 +13,6 @@ export const fetchMovieById =
             }
         )
             .then((res) => {
-                console.log(res)
                 let movie = res.data.data
                 movie.releaseDate = new Date(movie.releaseDate)
                 movie.releaseDate = movie.releaseDate.getFullYear() + "/" + movie.releaseDate.getMonth() + "/" + movie.releaseDate.getDate();
