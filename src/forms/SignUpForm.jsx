@@ -162,6 +162,7 @@ function SignupInput() {
                         name='username'
                         required
                         ref={username}
+                        autoComplete='none'
                         className='su-input-field'
                     />
                     {/* Password input */}

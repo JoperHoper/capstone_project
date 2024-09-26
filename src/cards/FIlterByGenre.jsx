@@ -52,7 +52,7 @@ function FilterByGenre() {
 
     // Check if user is logged in before favourite. Route to login page if no
     useEffect(() => {
-        if (createFavourite.favArr === 403) {
+        if (createFavourite.favArr === 403 || createFavourite.favArr === 401) {
             setAccessToken("")
             setTimeout(() => {
                 navigate("/login")
