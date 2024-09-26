@@ -2,11 +2,12 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Container, Typography, Box } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom'
 import forge from "node-forge"
 import pubkey from "../../public/id_rsa_capstone.txt";
+import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 import "../css/signup.css"
-import axios from 'axios';
 
 function SignUpForm() {
     return (
@@ -31,27 +32,36 @@ function SignupInput() {
     const [type, setType] = useState('password');
     const [icon, setIcon] = useState(<VisibilityOff />)
     const username = useRef();
-    const firstName = useRef();
-    const lastName = useRef();
+    const name = useRef();
+    const navigate = useNavigate();
 
+    // Toast notification
     const noMatchPwd = () => {
+        setUserSubmit(false)
         toast.error("Password does not match");
         setTimeout(() => {
             toast.clearWaitingQueue();
         }, 1000);
     };
 
+    // Toast notification
     const invalidUserPass = () => {
+        setUserSubmit(false)
         toast.error("Invalid Password");
         setTimeout(() => {
             toast.clearWaitingQueue();
         }, 1000);
     };
 
+    // Toast notification
     const success = () => {
         toast.success("Submitted");
+        setTimeout(() => {
+            navigate("/login")
+        }, 3000);
     };
 
+    // Password visibility toggle
     const handleToggle = () => {
         if (type === 'password') {
             setIcon(<Visibility />);
@@ -62,32 +72,26 @@ function SignupInput() {
         }
     }
 
+    // Check if password entered is the same
     const pwdIsSame = (e) => {
         e.preventDefault()
         let retypePwd = e.target.value
         setRePassword(retypePwd)
-        console.log(rePassword)
     }
 
     const handlepwd = (e) => {
         e.preventDefault();
         setPassword(e.target.value)
-        console.log(password)
     }
 
     const handleEmail = (e) => {
         e.preventDefault();
         setEmail(e.target.value)
-        console.log(email)
     }
 
     useEffect(() => {
-        console.log("validEmail:", validEmail)
-        console.log("validPassword", validPassword)
         if (userSubmit) {
             if (validPassword && validEmail) {
-                console.log(password)
-                console.log(rePassword)
                 if (password == rePassword) {
                     fetch(pubkey).then(row => row.text()).then(publicKeyRSA => {
                         let forgepublicKey = forge.pki.publicKeyFromPem(publicKeyRSA);
@@ -95,15 +99,11 @@ function SignupInput() {
                         let encryptedData = forgepublicKey.encrypt(password);
                         let hexValue = forge.util.bytesToHex(encryptedData)
                         axios.post("http://localhost:8000/user/create", {
-                            firstName: firstName.current.value,
-                            lastName: lastName.current.value,
+                            name: name.current.value,
                             username: username.current.value,
                             email: email,
                             password: hexValue
                         })
-                            .then((data) => {
-                                console.log(data)
-                            })
                     })
                     success();
                 }
@@ -119,6 +119,7 @@ function SignupInput() {
 
     function handleSubmit() {
         // Minimum eight characters, at least one letter and one number
+        // Regex to ensure any values passed in is within the parameters
         let pwdPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
         let emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
         setValidEmail(emailPattern.test(email));
@@ -131,27 +132,15 @@ function SignupInput() {
             <Container disableGutters={true} maxWidth="md" sx={{ color: "text.primary", typography: "menu" }}>
                 <form className='su-form-container'>
                     {/* FName input */}
-                    <label htmlFor="fname" color='text.primary'>First Name</label>
+                    <label htmlFor="name" color='text.primary'>Name</label>
                     <input
                         type='text'
                         placeholder='Enter Name'
-                        name='fname'
+                        name='name'
                         maxLength={30}
                         required
-                        ref={firstName}
-                        autoComplete="given-name"
-                        className='su-input-field'
-                    />
-                    {/* LName input */}
-                    <label htmlFor="lname" color='text.primary'>Last Name</label>
-                    <input
-                        type='text'
-                        placeholder='Enter Last Name'
-                        name='lname'
-                        maxLength={30}
-                        required
-                        ref={lastName}
-                        autoComplete="family-name"
+                        ref={name}
+                        autoComplete="none"
                         className='su-input-field'
                     />
                     {/* Email input */}
@@ -163,6 +152,7 @@ function SignupInput() {
                         onChange={handleEmail}
                         value={email}
                         required
+                        autoComplete='none'
                         className='su-input-field'
                     />
                     {/* Username input */}
@@ -173,6 +163,7 @@ function SignupInput() {
                         name='username'
                         required
                         ref={username}
+                        autoComplete='none'
                         className='su-input-field'
                     />
                     {/* Password input */}
@@ -180,7 +171,7 @@ function SignupInput() {
                     <div className='pwd-container'>
                         <input
                             type={type}
-                            placeholder='Enter Password'
+                            placeholder='Minimum 8 characters, at least one number'
                             name={"psw"}
                             maxLength={12}
                             required

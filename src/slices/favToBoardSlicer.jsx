@@ -5,7 +5,6 @@ const initialState = { loading: true, favInBoardArr: [], error: '' }
 
 export const fetchFavInBoard =
     createAsyncThunk("fetchFavInBoard", async (input) => {
-        console.log(input)
         return axios.get("http://localhost:8000/board_favourite/get",
             {
                 boardId: input.boardId,
@@ -17,7 +16,6 @@ export const fetchFavInBoard =
             }
         )
             .then((res) => {
-                console.log(res)
                 return res.data.data
             })
             .catch((error) => {
@@ -36,7 +34,6 @@ const favToBoardSlice = createSlice({
             state.loading = false
             state.favInBoardArr = action.payload
             state.error = ""
-            console.log(state)
         })
         builder.addCase(fetchFavInBoard.rejected, (state, action) => {
             state.loading = false

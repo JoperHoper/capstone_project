@@ -4,6 +4,11 @@ import favouriteSlice from "../slices/favourite";
 import createFavouriteSlice from "../slices/createFavourite";
 import favouriteBoardSlicer from "../slices/favouriteBoardSlicer";
 import favToBoardSlicer from "../slices/favToBoardSlicer";
+import userSlicer from "../slices/userSlicer";
+import updateUserSlicer from "../slices/updateUserSlicer";
+import movieByIdSlicer from "../slices/movieByIdSlicer";
+import deleteFavouriteSlicer from "../slices/deleteFavourite";
+
 
 export const store = configureStore({
     reducer: {
@@ -11,6 +16,10 @@ export const store = configureStore({
         favourite: favouriteSlice,
         createFavourite: createFavouriteSlice,
         favouriteBoard: favouriteBoardSlicer,
-        favToBoard: favToBoardSlicer
+        favToBoard: favToBoardSlicer,
+        user: userSlicer,
+        updateUser: updateUserSlicer,
+        movieById: movieByIdSlicer,
+        deleteFavourite: deleteFavouriteSlicer
     }
 })

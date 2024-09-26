@@ -3,9 +3,12 @@ import axios from "axios";
 
 const initialState = { loading: true, favArr: [], error: '' }
 
-export const fetchFavourites =
-    createAsyncThunk("fetchFavourites", async (input) => {
-        return axios.get("http://localhost:8000/favourite/get",
+export const deleteFavourites =
+    createAsyncThunk("deletefavourites", async (input) => {
+        return axios.post("http://localhost:8000/favourite/delete",
+            {
+                favouriteId: input.favouriteId
+            },
             {
                 headers: {
                     Authorization: 'Bearer ' + input.accessToken //the token is a variable which holds the token
@@ -16,29 +19,28 @@ export const fetchFavourites =
                 return res.data.data
             })
             .catch((error) => {
-                return error.message
+                return error.status
             })
     })
 
-const favouriteSlice = createSlice({
-    name: "favourite",
+const deleteFavouriteSlice = createSlice({
+    name: "deleteFavourites",
     initialState,
     extraReducers: (builder) => {
-        builder.addCase(fetchFavourites.pending, (state) => {
+        builder.addCase(deleteFavourites.pending, (state) => {
             state.loading = true
         })
-        builder.addCase(fetchFavourites.fulfilled, (state, action) => {
+        builder.addCase(deleteFavourites.fulfilled, (state, action) => {
             state.loading = false
             state.favArr = action.payload
             state.error = ""
         })
-        builder.addCase(fetchFavourites.rejected, (state, action) => {
+        builder.addCase(deleteFavourites.rejected, (state, action) => {
             state.loading = false
             state.favArr = []
-            state.error = action.error.message
+            state.error = action.error
         })
     }
 })
 
-export default favouriteSlice.reducer
-
+export default deleteFavouriteSlice.reducer

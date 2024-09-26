@@ -3,38 +3,46 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchMovies } from '../slices/movie'
 import { fetchFavourites } from '../slices/favourite'
+import { deleteFavourites } from '../slices/deleteFavourite'
 import { createFavourites } from '../slices/createFavourite'
 import { Button, Container, Grid2, Card, Typography, CardMedia, CardContent, CardActionArea, CardActions } from '@mui/material'
 import { FavoriteBorder, Favorite } from '@mui/icons-material'
-import useLocalStorage from "../hook/useLocalStorage";
 import { useNavigate } from "react-router-dom";
+import useLocalStorage from "../hook/useLocalStorage";
+import "../css/ViewAll.css"
 
 function ViewAllCards() {
     const dispatch = useDispatch();
     const movie = useSelector((state) => state.movie)
     const favourite = useSelector((state) => state.favourite)
     const createFavourite = useSelector((state) => state.createFavourite)
+
     const [viewMore, setViewMore] = useState(false)
     const [favoriteMap, setFavoriteMap] = useState({})
+    const [movieToFavouriteMap, setMovieToFavouriteMap] = useState({})
     const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
     const navigate = useNavigate();
 
+    // Dispatch movies and favourite slicer
     useEffect(() => {
         dispatch(fetchMovies())
-        dispatch(fetchFavourites())
+        dispatch(fetchFavourites({ accessToken: accessToken }))
     }, [])
 
+    // Initialising favourite map, only re-render when new favourite is added
     useEffect(() => {
         setUpFavouriteMap()
     }, [favourite])
 
+    // Check if user is logged in before favourite. Route to login page if no
     useEffect(() => {
-        console.log(createFavourite)
-        if (createFavourite.favArr === 403) {
-            setAccessToken("")
-            setTimeout(() => {
-                navigate("/login")
-            }, 500)
+        if (Object.keys(favoriteMap).length > 0) {
+            if (createFavourite.favArr === 403 || createFavourite.favArr === 401) {
+                setAccessToken("")
+                setTimeout(() => {
+                    navigate("/login")
+                }, 500)
+            }
         }
     }, [createFavourite])
 
@@ -42,17 +50,23 @@ function ViewAllCards() {
         setViewMore(true)
     }
 
+    // Check if object is available
     const setUpFavouriteMap = () => {
-        if (favourite?.favArr?.length > 0) {
-            let temp = {}
-            favourite.favArr.map((data) => {
-                temp[data.movieId] = true
-            })
-            setFavoriteMap(temp)
+        if (favourite && favourite.favArr && Array.isArray(favourite.favArr)) {
+            if (favourite?.favArr?.length > 0) {
+                let favMovieMap = {}
+                let movieToFavMap = {}
+                favourite.favArr.map((data) => {
+                    favMovieMap[data.movieId] = true
+                    movieToFavMap[data.movieId.toString()] = data.favouriteId
+                })
+                setFavoriteMap(favMovieMap)
+                setMovieToFavouriteMap(movieToFavMap)
+            }
         }
-
     }
 
+    // Handling favourite logic
     const handleFavourite = (e) => {
         const movieId = parseInt(e.currentTarget.dataset.id)
         let latestFavMap = { ...favoriteMap }
@@ -62,14 +76,24 @@ function ViewAllCards() {
         } else {
             latestFavMap[movieId] = !latestFavMap[e.currentTarget.dataset.id]
             if (latestFavMap[movieId]) {
-                dispatch(createFavourites(movieId, accessToken))
+                dispatch(createFavourites({ movieId: movieId, accessToken: accessToken }))
+            }
+            else {
+                if (movieToFavouriteMap) {
+                    let favouriteId = movieToFavouriteMap[movieId]
+                    dispatch(deleteFavourites({ favouriteId: favouriteId, accessToken: accessToken }))
+                    let updatedFavMap = movieToFavouriteMap
+                    updatedFavMap[movieId] = undefined
+                    setMovieToFavouriteMap(updatedFavMap)
+                    setFavoriteMap(latestFavMap)
+                }
             }
         }
         setFavoriteMap(latestFavMap)
     }
 
+    // Toggle between icons
     const favouriteIcon = (movieId) => {
-        // console.log(favoriteMap)
         if (favoriteMap[movieId]) {
             return <Favorite data-id={movieId} color='primary' onClick={handleFavourite} />
         }
@@ -78,6 +102,11 @@ function ViewAllCards() {
         }
     }
 
+    const viewMovieDetails = (e) => {
+        navigate("/movie/" + e.currentTarget.id)
+    }
+
+    // Mapping movie cards
     const cards = () => {
         if (movie.loading) {
             return <div>Loading...</div>
@@ -88,10 +117,10 @@ function ViewAllCards() {
         }
         return movieDisplay.map((movie) => {
             return <Grid2 size={{ xs: 4, md: 2 }} key={movie.movieId}>
-                <Card sx={{ maxWidth: "30vw", minHeight: "60vh" }}>
-                    <CardActionArea sx={{ position: "relative" }}>
+                <Card className='movie-card-container'>
+                    <CardActionArea>
                         <Typography>
-                            <span style={{ zIndex: "10", position: "absolute", border: "2px solid red" }}>
+                            <span>
                                 {favouriteIcon(movie.movieId)}
                             </span>
                         </Typography>
@@ -100,6 +129,8 @@ function ViewAllCards() {
                             height="150"
                             image={movie.posterUrl}
                             alt={movie.movieTitle}
+                            id={movie.movieId}
+                            onClick={viewMovieDetails}
                         />
                         <CardContent>
                             <Typography variant="h6" component="div" color='black' sx={{ lineHeight: 1.2 }}>
@@ -121,8 +152,8 @@ function ViewAllCards() {
     }
 
     return (
-        <Container maxWidth="lg" sx={{ minHeight: "120vh" }}>
-            <Grid2 container spacing={3} justifyItems="center" sx={{ border: "1px solid green", width: "100%" }}>
+        <Container maxWidth="lg" className='viewAll-container'>
+            <Grid2 container spacing={3} justifyItems="center">
                 {cards()}
             </Grid2>
             <Typography>

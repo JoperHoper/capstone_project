@@ -4,31 +4,38 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchMovies } from '../slices/movie'
 import { Box, Container, Typography } from '@mui/material'
 import { fetchFavourites } from '../slices/favourite'
+import { deleteFavourites } from '../slices/deleteFavourite'
 import { createFavourites } from '../slices/createFavourite'
-import useLocalStorage from "../hook/useLocalStorage";
 import { FavoriteBorder, Favorite } from '@mui/icons-material'
 import { useNavigate } from "react-router-dom";
+import useLocalStorage from "../hook/useLocalStorage";
 import "../css/filteredCards.css"
 
 function FilterByYear() {
     const dispatch = useDispatch();
+    // Using slicer state
     const movie = useSelector((state) => state.movie)
     const favourite = useSelector((state) => state.favourite)
     const createFavourite = useSelector((state) => state.createFavourite)
+
     const [currentIndex, setCurrentIndex] = useState(0);
     const [favoriteMap, setFavoriteMap] = useState({})
+    const [movieToFavouriteMap, setMovieToFavouriteMap] = useState({})
     const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
     const navigate = useNavigate();
 
+    // Dispatch movies and favourite slicer
     useEffect(() => {
         dispatch(fetchMovies())
         dispatch(fetchFavourites({ accessToken: accessToken }))
     }, [])
 
+    // Initialising favourite map, only re-render when new favourite is added
     useEffect(() => {
         setUpFavouriteMap()
     }, [favourite])
 
+    // Filtering movies
     let filteredArr = []
     const populateMovie = () => {
         if (movie && movie.movieArr && Array.isArray(movie.movieArr)) {
@@ -38,9 +45,9 @@ function FilterByYear() {
         }
     }
 
+    // Check if user is logged in before favourite. Route to login page if no
     useEffect(() => {
-        console.log(createFavourite)
-        if (createFavourite.favArr === 403) {
+        if (createFavourite.favArr === 403 || createFavourite.favArr === 401) {
             setAccessToken("")
             setTimeout(() => {
                 navigate("/login")
@@ -49,17 +56,22 @@ function FilterByYear() {
     }, [createFavourite])
 
     const setUpFavouriteMap = () => {
+        // Check if object is available
         if (favourite && favourite.favArr && Array.isArray(favourite.favArr)) {
             if (favourite?.favArr?.length > 0) {
-                let temp = {}
+                let favMovieMap = {}
+                let movieToFavMap = {}
                 favourite?.favArr?.map((data) => {
-                    temp[data.movieId] = true
+                    favMovieMap[data.movieId] = true
+                    movieToFavMap[data.movieId.toString()] = data.favouriteId
                 })
-                setFavoriteMap(temp)
+                setFavoriteMap(favMovieMap)
+                setMovieToFavouriteMap(movieToFavMap)
             }
         }
     }
 
+    // Handling favourite logic
     const handleFavourite = (e) => {
         const movieId = parseInt(e.currentTarget.dataset.id)
         let latestFavMap = { ...favoriteMap }
@@ -71,10 +83,21 @@ function FilterByYear() {
             if (latestFavMap[movieId]) {
                 dispatch(createFavourites({ movieId: movieId, accessToken: accessToken }))
             }
+            else {
+                if (movieToFavouriteMap) {
+                    let favouriteId = movieToFavouriteMap[movieId]
+                    dispatch(deleteFavourites({ favouriteId: favouriteId, accessToken: accessToken }))
+                    let updatedFavMap = movieToFavouriteMap
+                    updatedFavMap[movieId] = undefined
+                    setMovieToFavouriteMap(updatedFavMap)
+                    setFavoriteMap(latestFavMap)
+                }
+            }
         }
         setFavoriteMap(latestFavMap)
     }
 
+    // Toggle between icons
     const favouriteIcon = (movieId) => {
         if (favoriteMap[movieId]) {
             return <Favorite data-id={movieId} color='primary' onClick={handleFavourite} />
@@ -84,15 +107,18 @@ function FilterByYear() {
         }
     }
 
+    const viewMovieDetails = (e) => {
+        navigate("/movie/" + e.currentTarget.id)
+    }
+
     const handleFilteredYears = () => {
-        console.log(filteredArr)
         if (filteredArr && Array.isArray(filteredArr)) {
             return filteredArr.slice(currentIndex, currentIndex + 5).map((card, index) => (
                 <div className='card' key={index}>
-                    <span style={{ zIndex: "10", position: "absolute", border: "2px solid red" }}>
+                    <span style={{ zIndex: "10", position: "absolute" }}>
                         {favouriteIcon(card.movieId)}
                     </span>
-                    <img className='' src={card.posterUrl} alt="Card" />
+                    <img className='' src={card.posterUrl} alt="Card" id={card.movieId} onClick={viewMovieDetails} />
                     <span>
                         <Typography variant='text.primary'>
                             <Box className="trailer-btn">
@@ -112,6 +138,7 @@ function FilterByYear() {
         }
     }
 
+    // Arrow to scroll cards
     const handleFilteredCards = () => {
         const handleNext = () => {
             if (currentIndex === filteredArr.length - 1) {
@@ -149,7 +176,7 @@ function FilterByYear() {
     }
 
     return (
-        <Container maxWidth="false" sx={{ minHeight: "40vh", border: "1px solid red", marginTop: "20px", width: "100%" }}>
+        <Container maxWidth="false" sx={{ minHeight: "40vh", marginTop: "20px", width: "100%", marginBottom: "10vh" }}>
             <Typography variant='typography.menu' color='text.primary'>
                 <h1>In the 20's</h1>
             </Typography>

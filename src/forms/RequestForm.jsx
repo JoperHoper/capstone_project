@@ -1,19 +1,19 @@
-import { Box, Container, Typography } from '@mui/material'
-import "../css/movie-request.css"
 import React, { useState } from 'react'
-import 'react-toastify/dist/ReactToastify.css';
+import { Box, Container, Typography } from '@mui/material'
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import "../css/movie-request.css"
 
 function RequestForm() {
     return (
         <Container disableGutters={true} maxWidth="lg" className='request-form-container'>
-            <Typography >
-                <Box sx={{ color: "text.primary", typography: "heading" }}>
-                    <h1>Movie Request</h1>
+            <Typography color="text.primary" variant="typography.heading" >
+                <h1 style={{ textAlign: "center" }}>Movie Request</h1>
+                <Box sx={{ display: "flex", flexDirection: "column", height: "80vh" }}>
+                    {MovieRequest()}
                 </Box>
             </Typography>
-            <MovieRequest />
-            <ToastContainer />
+            <ToastContainer limit={2} />
         </Container>
     )
 }
@@ -22,7 +22,10 @@ function MovieRequest() {
     const [title, setTitle] = useState("");
     const [genre, setGenre] = useState("");
     const [date, setDate] = useState("");
+    const [cast, setCast] = useState("");
+    const [director, setDirector] = useState("");
 
+    // Genre dropdown
     const AllGenre = () => {
         const movieGenres = ["Horror", "Drama", "Comedy", "Action", "Romance", "Thriller", "Science Fiction", "Western", "Crime", "Animation", "Fantasy", "Historical", "Indie", "Documentary", "Musical", "Romance", "Others"];
 
@@ -45,15 +48,19 @@ function MovieRequest() {
 
     const handleTitleInput = (e) => {
         setTitle(e.target.value);
-        console.log(e.target.value)
+    }
+
+    const handleCastInput = (e) => {
+        setCast(e.target.value);
+    }
+
+    const handleDirectorInput = (e) => {
+        setDirector(e.target.value);
     }
 
 
     const handleSubmit = () => {
         if (title && genre && date) {
-            console.log(title)
-            console.log(genre)
-            console.log(date)
             setDate("")
             setTitle("")
             setGenre({ selected: "" })
@@ -65,8 +72,8 @@ function MovieRequest() {
     }
 
     return (
-        <Typography>
-            <Container disableGutters={true} maxWidth="md" sx={{ color: "text.primary", typography: "menu" }} >
+        <Box sx={{ height: "inherit" }}>
+            <Typography>
                 <form className='rq-form-container'>
                     {/* Title Input */}
                     <label htmlFor='title' color='text.primary'>Movie Title</label>
@@ -77,7 +84,31 @@ function MovieRequest() {
                         value={title}
                         maxLength={50}
                         onChange={handleTitleInput}
+                        className='request-field'
+                    />
+                    {/* Cast Input */}
+                    <label htmlFor='cast' color='text.primary'>Casts</label>
+                    <textarea
+                        type='text'
+                        placeholder='Enter Casts Name'
+                        name='cast'
+                        value={cast}
+                        maxLength={50}
+                        onChange={handleCastInput}
+                        multiple
+                        className='request-field'
+                    />
+                    {/* Director Input */}
+                    <label htmlFor='director' color='text.primary'>Director</label>
+                    <textarea
+                        type='text'
+                        placeholder='Enter Director Name'
+                        name='director'
+                        value={director}
+                        maxLength={50}
+                        onChange={handleDirectorInput}
                         required
+                        multiple
                         className='request-field'
                     />
                     {/* Genre Input */}
@@ -90,9 +121,11 @@ function MovieRequest() {
                     <label htmlFor='date'>Release Date</label>
                     <input name='date' type='date' required className='request-field' onChange={(e) => setDate(e.target.value)} />
                 </form>
-            </ Container>
-            <button onClick={handleSubmit} type='submit' className='request-btn'>Submit</button>
-        </Typography>
+            </Typography>
+            <Box sx={{ minHeight: "10vh" }}>
+                <button onClick={handleSubmit} type='submit' className='request-btn'>Submit</button>
+            </Box>
+        </ Box>
     )
 }
 

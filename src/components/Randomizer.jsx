@@ -6,7 +6,7 @@ import RandomCards from '../cards/RandomCards'
 
 function Randomizer() {
     return (
-        <Container disableGutters={true} maxWidth="false" sx={{ bgcolor: "background.default", minHeight: "115vh" }}>
+        <Container disableGutters={true} maxWidth="false" className='all-containers' sx={{ minHeight: "120vh" }}>
             <NavBar />
             <RandomCards />
             <Footer />

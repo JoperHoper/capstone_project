@@ -3,10 +3,8 @@ import axios from "axios";
 
 const initialState = { loading: true, favArr: [], error: '' }
 
-
 export const createFavourites =
     createAsyncThunk("createfavourites", async (input) => {
-        console.log(input)
         return axios.post("http://localhost:8000/favourite/create",
             {
                 movieId: input.movieId

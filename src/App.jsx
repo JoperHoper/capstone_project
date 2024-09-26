@@ -11,6 +11,7 @@ import Randomizer from './components/Randomizer';
 import Favourites from './components/Favourites';
 import Board from './components/Board';
 import About from './components/About';
+import MovieDetails from './components/MovieDetails';
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
         <Route path='favourites' element={<Favourites />} />
         <Route path='about' element={<About />} />
         <Route path='favourites/board/*' element={<Board />} />
+        <Route path='movie/*' element={<MovieDetails />} />
       </Routes>
     </ThemeProvider>
   )

@@ -7,7 +7,7 @@ import { Container } from '@mui/material'
 
 function Board() {
     return (
-        <Container disableGutters={true} maxWidth="false" sx={{ bgcolor: "background.default", minHeight: "220vh" }} >
+        <Container disableGutters={true} maxWidth="false" className='all-containers' sx={{ minHeight: "200vh" }} >
             <NavBar />
             <BoardDetails />
             <Footer />
