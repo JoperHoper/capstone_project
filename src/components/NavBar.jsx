@@ -13,25 +13,32 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchMovies } from '../slices/movie'
 
 function NavBar() {
+    const dispatch = useDispatch();
     const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
     const [searchResult, setSearchResult] = useState([]);
-    const dispatch = useDispatch();
+
     const movie = useSelector((state) => state.movie)
+
     const searchRef = useRef()
     const searchDrop = useRef()
     const navigate = useNavigate();
 
+    // Dispatch movies slicer
     useEffect(() => {
         dispatch(fetchMovies())
     }, [])
 
+    // Searchbar logic
     const handleSearch = () => {
+        // Ref to search bar input value
         if (searchRef.current.value.length > 0) {
             let OGsearch = searchDrop.current.className
+            // Unhide search dropdown if input > 0
             if (OGsearch.includes("hidden")) {
                 searchDrop.current.className = OGsearch.replace("hidden", "")
                 searchDrop.current.className = searchDrop.current.className.trim()
             }
+            // Filter search result
             if (movie && movie.movieArr && Array.isArray(movie.movieArr)) {
                 let filteredSearch = movie.movieArr.filter((movieItem) => {
                     return movieItem.movieTitle.toLowerCase().includes(searchRef.current.value)
@@ -40,17 +47,20 @@ function NavBar() {
             }
         } else {
             let OGsearch = searchDrop.current.className
+            // Hide search dropdown
             if (!OGsearch.includes("hidden")) {
                 searchDrop.current.className = OGsearch + " hidden"
             }
         }
     }
 
+    // Navigate to specific movie page with movie id
     const viewMovieDetails = (e) => {
         navigate("/movie/" + e.currentTarget.id)
         window.location.reload()
     }
 
+    // Display up to 5 search items
     const displaySearchResult = () => {
         if (searchResult.length > 0) {
             return searchResult.slice(0, 5).map((searchItem, index) => {
@@ -70,6 +80,7 @@ function NavBar() {
         }
     }
 
+    // If logged in = Profile icon, else "Login"
     const handleProfileDisplay = () => {
         if (accessToken !== "") {
             return <a href='/account'><AccountCircle /></a>
@@ -129,6 +140,7 @@ function TemporaryDrawer() {
         'Sign up'
     ]
 
+    // Route to specific pages
     const routing = (e) => {
         switch (e.currentTarget.id) {
             case "view-all":

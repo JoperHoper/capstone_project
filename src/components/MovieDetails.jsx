@@ -13,6 +13,7 @@ function MovieDetails() {
     const splat = useParams()["*"];
     const movieItem = useSelector((state) => state.movieById)
 
+    // Fetch and dispatch movie via movie id using splat
     useEffect(() => {
         dispatch(fetchMovieById({ movieId: splat }));
     }, [])

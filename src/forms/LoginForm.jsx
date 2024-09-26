@@ -3,12 +3,12 @@ import { Container, Typography, Box } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import useLocalStorage from "../hook/useLocalStorage.jsx"
 import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import forge from "node-forge"
 import pubkey from "../../public/id_rsa_capstone.txt";
 import 'react-toastify/dist/ReactToastify.css';
 import "../css/login.css"
-import { useNavigate } from 'react-router-dom';
 
 
 function LoginForm() {
@@ -29,10 +29,12 @@ function LoginInput() {
     const [type, setType] = useState('password');
     const [icon, setIcon] = useState(<VisibilityOff />)
     const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
+
     const username = useRef();
     const pwd = useRef();
     const navigate = useNavigate()
 
+    // Password visibility toggle
     const handleToggle = () => {
         if (type === 'password') {
             setIcon(<Visibility />);
@@ -43,7 +45,8 @@ function LoginInput() {
         }
     }
 
-    const notify = () => { toast.error("Username or Password Invalid") };
+    // Toast notification if password or username is wrong
+    const notify = () => { toast.error("Invalid Username or Password") };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -57,11 +60,18 @@ function LoginInput() {
                 password: hexValue
             })
                 .then((data) => {
-                    let retrieveAccessToken = data.data.data
-                    setAccessToken(retrieveAccessToken)
-                    setTimeout(() => {
-                        navigate("/")
-                    }, 500)
+                    // If password or username does not match
+                    if ((data.data.status) == "failed") {
+                        notify();
+                    }
+                    // Set access token to local storage and route to homepage
+                    else {
+                        let retrieveAccessToken = data.data.data
+                        setAccessToken(retrieveAccessToken)
+                        setTimeout(() => {
+                            navigate("/")
+                        }, 500)
+                    }
                 })
         })
     }

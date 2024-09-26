@@ -11,6 +11,7 @@ import "../css/favouriteBoard.css"
 function FavouriteBoard() {
     const dispatch = useDispatch();
     const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
+
     const fav = useSelector((state) => state.favouriteBoard)
     const navigate = useNavigate();
 
@@ -18,6 +19,7 @@ function FavouriteBoard() {
         dispatch(fetchFavouriteBoard({ accessToken: accessToken }))
     }, [])
 
+    // Check if user is logged in before favourite. Route to login page if no
     useEffect(() => {
         if (fav && (fav.boardArr === 403 || fav.boardArr === 401)) {
             setAccessToken("")
@@ -27,6 +29,7 @@ function FavouriteBoard() {
         }
     }, [fav])
 
+    // handle click into board
     const handleClick = () => {
         if (fav.boardArr[0]) {
             let boardId = fav.boardArr[0].boardId

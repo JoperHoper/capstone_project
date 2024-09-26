@@ -1,8 +1,8 @@
-import { Box, Container, Typography } from '@mui/material'
-import "../css/movie-request.css"
 import React, { useState } from 'react'
-import 'react-toastify/dist/ReactToastify.css';
+import { Box, Container, Typography } from '@mui/material'
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import "../css/movie-request.css"
 
 function RequestForm() {
     return (
@@ -25,6 +25,7 @@ function MovieRequest() {
     const [cast, setCast] = useState("");
     const [director, setDirector] = useState("");
 
+    // Genre dropdown
     const AllGenre = () => {
         const movieGenres = ["Horror", "Drama", "Comedy", "Action", "Romance", "Thriller", "Science Fiction", "Western", "Crime", "Animation", "Fantasy", "Historical", "Indie", "Documentary", "Musical", "Romance", "Others"];
 

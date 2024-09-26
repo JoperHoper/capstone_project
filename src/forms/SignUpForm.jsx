@@ -2,12 +2,12 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Container, Typography, Box } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom'
 import forge from "node-forge"
 import pubkey from "../../public/id_rsa_capstone.txt";
+import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 import "../css/signup.css"
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom'
 
 function SignUpForm() {
     return (
@@ -35,6 +35,7 @@ function SignupInput() {
     const name = useRef();
     const navigate = useNavigate();
 
+    // Toast notification
     const noMatchPwd = () => {
         setUserSubmit(false)
         toast.error("Password does not match");
@@ -43,6 +44,7 @@ function SignupInput() {
         }, 1000);
     };
 
+    // Toast notification
     const invalidUserPass = () => {
         setUserSubmit(false)
         toast.error("Invalid Password");
@@ -51,6 +53,7 @@ function SignupInput() {
         }, 1000);
     };
 
+    // Toast notification
     const success = () => {
         toast.success("Submitted");
         setTimeout(() => {
@@ -58,6 +61,7 @@ function SignupInput() {
         }, 3000);
     };
 
+    // Password visibility toggle
     const handleToggle = () => {
         if (type === 'password') {
             setIcon(<Visibility />);
@@ -68,6 +72,7 @@ function SignupInput() {
         }
     }
 
+    // Check if password entered is the same
     const pwdIsSame = (e) => {
         e.preventDefault()
         let retypePwd = e.target.value
@@ -114,6 +119,7 @@ function SignupInput() {
 
     function handleSubmit() {
         // Minimum eight characters, at least one letter and one number
+        // Regex to ensure any values passed in is within the parameters
         let pwdPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
         let emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
         setValidEmail(emailPattern.test(email));
