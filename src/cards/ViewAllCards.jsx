@@ -36,11 +36,13 @@ function ViewAllCards() {
 
     // Check if user is logged in before favourite. Route to login page if no
     useEffect(() => {
-        if (createFavourite.favArr === 403 || createFavourite.favArr === 401) {
-            setAccessToken("")
-            setTimeout(() => {
-                navigate("/login")
-            }, 500)
+        if (Object.keys(favoriteMap).length > 0) {
+            if (createFavourite.favArr === 403 || createFavourite.favArr === 401) {
+                setAccessToken("")
+                setTimeout(() => {
+                    navigate("/login")
+                }, 500)
+            }
         }
     }, [createFavourite])
 

@@ -140,7 +140,7 @@ function SignupInput() {
                         maxLength={30}
                         required
                         ref={name}
-                        autoComplete="given-name"
+                        autoComplete="none"
                         className='su-input-field'
                     />
                     {/* Email input */}
@@ -152,6 +152,7 @@ function SignupInput() {
                         onChange={handleEmail}
                         value={email}
                         required
+                        autoComplete='none'
                         className='su-input-field'
                     />
                     {/* Username input */}
@@ -170,7 +171,7 @@ function SignupInput() {
                     <div className='pwd-container'>
                         <input
                             type={type}
-                            placeholder='Enter Password'
+                            placeholder='Minimum 8 characters, at least one number'
                             name={"psw"}
                             maxLength={12}
                             required
