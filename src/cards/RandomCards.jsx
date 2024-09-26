@@ -2,23 +2,26 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchMovies } from '../slices/movie'
-import "../css/randomiser.css"
 import { Box, Container, Typography, Card, CardMedia, CardContent, CardActionArea, CardActions } from '@mui/material'
+import "../css/randomiser.css"
 
 function RandomCards() {
     const dispatch = useDispatch();
     const movie = useSelector((state) => state.movie)
     const [randomIndex, setRandomIndex] = useState(0);
+
     let movieArr = [...movie.movieArr]
 
     useEffect(() => {
         dispatch(fetchMovies())
     }, [])
 
+    //Randomising logic
     const getRandomMovies = () => {
         setRandomIndex(Math.floor(Math.random() * movieArr.length));
     }
 
+    // Popuate random card
     const randomizeCards = () => {
         if (movie.loading) {
             return <div>Loading...</div>
@@ -34,18 +37,20 @@ function RandomCards() {
                             alt={movieArr[randomIndex].movieTitle}
                         />
                         <CardContent>
-                            <Typography color='primary' variant='typography.heading'>
-                                <h2>{movieArr[randomIndex].movieTitle}</h2>
-                            </Typography>
-                            <Typography color='primary' variant='typography.p'>
-                                <p><strong>Language:</strong> {movieArr[randomIndex].language}</p>
-                                <p><strong>Genre:</strong>{movieArr[randomIndex].genres.slice(0, 2).map((data) => {
-                                    return <p>{data.genre}</p>
-                                })}</p>
-                            </Typography>
-                            <Typography color='primary' variant='typography.p'>
-                                <p><strong>Released: </strong>{movieArr[randomIndex].releaseDate}</p>
-                            </Typography>
+                            <Box sx={{ width: "20vw" }}>
+                                <Typography color='primary' variant='typography.heading'>
+                                    <h2>{movieArr[randomIndex].movieTitle}</h2>
+                                </Typography>
+                                <Typography color='primary' variant='typography.p'>
+                                    <p><strong>Language:</strong> {movieArr[randomIndex].language}</p>
+                                    <p><strong>Genre:</strong>{movieArr[randomIndex].genres.slice(0, 2).map((data) => {
+                                        return <p>{data.genre}</p>
+                                    })}</p>
+                                </Typography>
+                                <Typography color='primary' variant='typography.p'>
+                                    <p><strong>Released: </strong>{movieArr[randomIndex].releaseDate}</p>
+                                </Typography>
+                            </Box>
                         </CardContent>
                         <CardActions className="random-cards-trailer">
                             <a target='blank' href={movieArr[randomIndex].trailerUrl}>Watch Trailer</a>

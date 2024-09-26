@@ -7,8 +7,8 @@ import { deleteFavourites } from '../slices/deleteFavourite'
 import { createFavourites } from '../slices/createFavourite'
 import { Button, Container, Grid2, Card, Typography, CardMedia, CardContent, CardActionArea, CardActions } from '@mui/material'
 import { FavoriteBorder, Favorite } from '@mui/icons-material'
-import useLocalStorage from "../hook/useLocalStorage";
 import { useNavigate } from "react-router-dom";
+import useLocalStorage from "../hook/useLocalStorage";
 import "../css/ViewAll.css"
 
 function ViewAllCards() {
@@ -16,22 +16,25 @@ function ViewAllCards() {
     const movie = useSelector((state) => state.movie)
     const favourite = useSelector((state) => state.favourite)
     const createFavourite = useSelector((state) => state.createFavourite)
-    const deleteFavourite = useSelector((state) => state.deleteFavourites)
+
     const [viewMore, setViewMore] = useState(false)
     const [favoriteMap, setFavoriteMap] = useState({})
     const [movieToFavouriteMap, setMovieToFavouriteMap] = useState({})
     const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
     const navigate = useNavigate();
 
+    // Dispatch movies and favourite slicer
     useEffect(() => {
         dispatch(fetchMovies())
         dispatch(fetchFavourites({ accessToken: accessToken }))
     }, [])
 
+    // Initialising favourite map, only re-render when new favourite is added
     useEffect(() => {
         setUpFavouriteMap()
     }, [favourite])
 
+    // Check if user is logged in before favourite. Route to login page if no
     useEffect(() => {
         if (createFavourite.favArr === 403 || createFavourite.favArr === 401) {
             setAccessToken("")
@@ -45,6 +48,7 @@ function ViewAllCards() {
         setViewMore(true)
     }
 
+    // Check if object is available
     const setUpFavouriteMap = () => {
         if (favourite && favourite.favArr && Array.isArray(favourite.favArr)) {
             if (favourite?.favArr?.length > 0) {
@@ -60,6 +64,7 @@ function ViewAllCards() {
         }
     }
 
+    // Handling favourite logic
     const handleFavourite = (e) => {
         const movieId = parseInt(e.currentTarget.dataset.id)
         let latestFavMap = { ...favoriteMap }
@@ -85,6 +90,7 @@ function ViewAllCards() {
         setFavoriteMap(latestFavMap)
     }
 
+    // Toggle between icons
     const favouriteIcon = (movieId) => {
         if (favoriteMap[movieId]) {
             return <Favorite data-id={movieId} color='primary' onClick={handleFavourite} />
@@ -98,6 +104,7 @@ function ViewAllCards() {
         navigate("/movie/" + e.currentTarget.id)
     }
 
+    // Mapping movie cards
     const cards = () => {
         if (movie.loading) {
             return <div>Loading...</div>

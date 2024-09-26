@@ -1,7 +1,7 @@
 .random-cards-container {
   min-width: 20vw;
   max-width: 40vw;
-  min-height: 50vh;
+  max-height: 65vh;
 }
 
 .random-cards-container CardActionArea {
@@ -49,6 +49,7 @@
   color: #faf8f6;
   background-color: #6464ae;
   box-shadow: 5px 5px #ee6f4e;
+  user-select: none;
 }
 
 .randomiser-btn:hover {
